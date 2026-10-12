@@ -1,0 +1,16 @@
+{
+  "application": "TaskVilla",
+  "version": "0.8.0",
+  "versionCode": 8,
+  "package": "app.adc.taskvilla",
+  "author": "Aniruddha DuttaChowdhury",
+  "brand": "ADChowdhury",
+  "apkSHA256": "684e5e6eb2905288afdb5bda96bd9f89845cbefa9436ee005b4385b63e2be0fd",
+  "certificateSHA256": "fa5cf9a1d95a29fc2241b9fb090f3248cc38555cec60e992a0ba38ecc4ddfc79",
+  "sqliteSchema": 3,
+  "architecture": "Android WebView UI + native SQLite",
+  "seedData": false,
+  "emulatorMode": "headless",
+  "sharingEndToEndTests": "deferred until user requests",
+  "refresh": "local only; server API pending"
+}

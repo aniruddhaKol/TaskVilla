@@ -1,0 +1,13 @@
+{
+  "application": "taskvilla",
+  "version": "0.4.0",
+  "versionCode": 4,
+  "package": "app.adc.taskvilla",
+  "author": "Aniruddha DuttaChowdhury",
+  "brand": "ADChowdhury",
+  "apkSHA256": "ec19e509587ed9b5abbb18ecd687b0513c2035b0dae992b01503e4fc66f99651",
+  "certificateSHA256": "fa5cf9a1d95a29fc2241b9fb090f3248cc38555cec60e992a0ba38ecc4ddfc79",
+  "storage": "native SQLite",
+  "architecture": "Android WebView UI + native SQLite",
+  "seedData": false
+}

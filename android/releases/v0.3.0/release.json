@@ -1,0 +1,20 @@
+{
+  "applicationId": "app.adc.taskvilla",
+  "applicationName": "taskvilla",
+  "versionName": "0.3.0",
+  "versionCode": 3,
+  "author": "Aniruddha DuttaChowdhury",
+  "developerBrand": "ADChowdhury",
+  "sha256": "68a5a581096319e950a39b5ec5d36b0255cabf0240137305781cc7feeabb1e9a",
+  "sizeBytes": 2930434,
+  "signingCertificateSha256": "fa5cf9a1d95a29fc2241b9fb090f3248cc38555cec60e992a0ba38ecc4ddfc79",
+  "updateFrom": "0.2.0",
+  "databaseSchema": 1,
+  "initialLists": 0,
+  "initialTasks": 0,
+  "features": [
+    "supplied adaptive app icon",
+    "searchable emoji palette and keyboard entry",
+    "colour swatches HEX and RGB sliders"
+  ]
+}

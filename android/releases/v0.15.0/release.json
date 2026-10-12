@@ -1,0 +1,17 @@
+{
+  "application": "TaskVilla",
+  "version": "0.15.0",
+  "versionCode": 15,
+  "package": "app.adc.taskvilla",
+  "author": "Aniruddha DuttaChowdhury",
+  "brand": "ADChowdhury",
+  "authorURL": "https://www.linkedin.com/in/adchowdhury/",
+  "email": "a.d.chowdhury@gmail.com",
+  "phone": "+919987484090",
+  "apkSHA256": "2eae91cf3f844bc9f9a2de50dbe7cc12f1e9dbedd63c08a4e02b7e90932dab03",
+  "certificateSHA256": "fa5cf9a1d95a29fc2241b9fb090f3248cc38555cec60e992a0ba38ecc4ddfc79",
+  "sqliteSchema": 3,
+  "seedData": false,
+  "emulatorMode": "headless",
+  "sharingEndToEndTests": "deferred until user requests"
+}
