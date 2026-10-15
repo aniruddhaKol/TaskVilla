@@ -155,3 +155,23 @@ button:focus-visible{outline:2px solid #b89168;outline-offset:2px}
 
 /* v0.22: anchor the subtle tricolour beneath the TaskVilla title. */
 .brand-header:after{content:none}.brand-header h1{position:relative}.brand-header h1:after{content:'';position:absolute;left:0;bottom:-4px;width:24px;height:2px;background:linear-gradient(90deg,#ff9933 0 33%,#fff 33% 66%,#138808 66%)}
+
+/* v0.23: fill the existing home Settings button with its gear. */
+.brand-header .icon-btn[data-go="settings"] .ic{width:32px;height:32px}
+
+/* v0.24: complete inset field focus rings and keyboard-sized form scroll areas. */
+.device :is(input,textarea,select,[contenteditable="true"]){scroll-margin-block:12px;box-sizing:border-box}
+.device :is(input,textarea,select,[contenteditable="true"]):focus{outline:2px solid #9b734c;outline-offset:-2px}
+.task-title-edit{min-width:0}
+.task-title-edit input{flex:1 1 0;min-width:0;width:0;border:1px solid transparent;border-radius:5px;padding:7px 8px;line-height:1.5}
+.device .field-invalid:focus{outline:none!important;border-color:#b3261e!important}
+.device .date-control:focus-within{outline:2px solid #9b734c;outline-offset:-2px}
+.device .date-control input:focus{outline:none}
+.mobile-content,.palette-dialog,.confirm-dialog{scroll-padding-block:12px}
+.palette-header{flex-shrink:0}
+.confirm-dialog{max-height:calc(100% - 12px);overflow-y:auto}
+.keyboard-open .device{height:var(--keyboard-viewport-height);min-height:0}
+.keyboard-open .mobile-content{overflow-anchor:none}
+.keyboard-open .palette-dialog{min-height:0}
+.keyboard-open .emoji-scroll{min-height:60px;flex-shrink:1}
+@media(max-width:700px){html,body{height:100%;overflow:hidden}}

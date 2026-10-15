@@ -61,7 +61,7 @@ public final class MainActivity extends Activity {
         setContentView(web); web.loadUrl("file:///android_asset/ui/index.html");
     }
     private final class Bridge {
-        @JavascriptInterface public void showKeyboard() { runOnUiThread(()->{web.requestFocus();web.postDelayed(()->web.evaluateJavascript("state.screen==='newtask'&&document.activeElement?.id==='task-title'",focused->{if("true".equals(focused))((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(web,InputMethodManager.SHOW_IMPLICIT);}),80);}); }
+        @JavascriptInterface public void showKeyboard() { runOnUiThread(()->{web.requestFocus();web.postDelayed(()->web.evaluateJavascript("(()=>{const e=document.activeElement;return !!e&&!e.readOnly&&(e.tagName==='TEXTAREA'||e.isContentEditable||(e.tagName==='INPUT'&&['text','email','search','tel','url','number','password'].includes(e.type)))})()",focused->{if("true".equals(focused)&&!isFinishing()&&!isDestroyed())((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(web,InputMethodManager.SHOW_IMPLICIT);}),80);}); }
         @JavascriptInterface public void hideKeyboard() { runOnUiThread(()->((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(web.getWindowToken(),0)); }
         @JavascriptInterface public String load() { try{return store.load();}catch(Exception e){return "{\"error\":\"Could not read local database\"}";} }
         @JavascriptInterface public String save(String json) { try{store.save(json);return "ok";}catch(Exception e){return "error";} }
