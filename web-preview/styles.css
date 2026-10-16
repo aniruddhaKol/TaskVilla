@@ -175,3 +175,37 @@ button:focus-visible{outline:2px solid #b89168;outline-offset:2px}
 .keyboard-open .palette-dialog{min-height:0}
 .keyboard-open .emoji-scroll{min-height:60px;flex-shrink:1}
 @media(max-width:700px){html,body{height:100%;overflow:hidden}}
+
+/* v0.25: consistent draft confirmations and local file controls. */
+.unsaved-overlay .palette-header h2{margin:0;font-size:17px}.unsaved-overlay .confirm-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}.unsaved-overlay .confirm-actions button{width:auto;flex:1;min-width:100px;margin:0}.unsaved-overlay .palette-header{justify-content:space-between;gap:12px;margin-bottom:12px}
+.button-primary.secondary-action{background-color:#e0e2df;background-image:linear-gradient(#f5f6f3,#e2e4e0 48%,#c3c7c1);color:#3e443c;border-color:#fff #959c92 #535b50 #e4e8e1;box-shadow:inset 0 1px 0 #ffffffcc,inset 0 -1px 0 #737c6c55,0 3px 0 #535b50,0 5px 8px #24140c44}
+.attachment-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.attachment-actions .button-primary{width:auto;flex:1;min-width:110px;font-size:11px;padding:8px;margin:4px 0 10px}.attachment-actions input[hidden]{display:none!important}.attachment-item{display:flex;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid #d8cfc4}.attachment-item>span{flex:1;min-width:0}.attachment-item strong{font-size:11px;overflow-wrap:anywhere;display:block}.attachment-item small{display:block;font-size:9px;color:#6b5a4e;margin-top:3px}.attachment-item .icon-btn{width:30px;height:30px;flex:0 0 30px}.attachment-item .ic{width:18px;height:18px}.attachment-item button:disabled,.attachment-actions button:disabled{opacity:.45;cursor:default}
+.app-disclaimer{display:flex;gap:9px;align-items:flex-start;margin:12px 0 4px;padding:10px;border:1px solid #bcb2a3;border-radius:5px;background:#eeeae2ee;color:#706555}.app-disclaimer .disclaimer-icon{width:24px;height:24px;flex:0 0 24px;fill:#ffd24a;stroke:#70561a;stroke-width:1.7;stroke-linejoin:round}.app-disclaimer p{font-size:10px;line-height:1.6;margin:0}
+.app-disclaimer img.disclaimer-icon{object-fit:contain;filter:brightness(0) saturate(100%) invert(67%) sepia(85%) saturate(570%) hue-rotate(355deg) brightness(93%) contrast(92%)}
+.section-link>.ic:first-child{margin-left:0}
+
+/* v0.26: attachment counts, newest-first rows and an explicit date-picker control. */
+.attachment-actions .button-primary{flex:0 1 auto;min-width:120px}
+.attachment-item{padding:8px;border:0;border-radius:5px;margin-top:2px;background:#fffdf8}
+.attachment-item:nth-child(even){background:#eae4da}
+.attachment-item [data-remove-file]{color:#742c24;background-color:#f4ceca}
+.task-attachment-mark{display:flex;align-items:center;justify-content:center;flex:0 0 22px;color:#6b5a4e}
+.task-attachment-mark .ic{width:18px;height:18px}
+.date-open{width:100%;min-height:36px;padding:7px 8px;border:0;border-radius:5px;background:#fffdf8;color:#30251f;text-align:left;font:inherit;font-size:12px;cursor:pointer}
+.date-open:focus-visible{outline-offset:-2px}
+.date-open .date-display{color:#30251f}.date-open .date-placeholder{color:#8b7766}
+.detail-field .date-control input[type=date]{width:1px;height:1px;inset:auto;left:0;bottom:0;min-height:0;opacity:0;pointer-events:none}
+
+/* v0.28: compact SMSAnalyzer-style home shortcut boxes. */
+.smart-navigation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;margin:2px 10px 0}
+.smart-box{position:relative;display:grid;grid-template-columns:clamp(18px,5vw,27px) minmax(0,1fr);grid-template-rows:auto 1fr;gap:3px clamp(3px,.8vw,7px);align-items:center;min-width:0;min-height:74px;margin:0;padding:9px 7px 9px 12px;text-align:left;background:#faf7f1;color:#30251f;border:1px solid #d8cfc4;border-radius:5px;box-shadow:none;cursor:pointer}
+.smart-box:before{content:'';position:absolute;left:4px;top:12px;bottom:12px;width:3px;border-radius:3px;background:var(--shortcut-accent)}
+.smart-today{--shortcut-accent:#a37a2f}.smart-planned{--shortcut-accent:#4d765b}.smart-favourites{--shortcut-accent:#ac7716}
+.smart-label{grid-column:1/-1;text-align:center;font-size:clamp(9px,2.5vw,11px);line-height:1.4;white-space:nowrap}
+.smart-icon{grid-column:1;grid-row:2;display:grid;place-items:center;color:var(--shortcut-accent)}
+.smart-icon .ic{width:clamp(18px,5vw,25px);height:clamp(22px,6vw,29px)}
+.smart-favourites .ic{fill:#efcd70}
+.smart-count{grid-column:2;grid-row:2;text-align:center;font-size:clamp(22px,6vw,29px);font-weight:500;line-height:1.1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.smart-box:hover{background:#f2ebdf}.smart-box:active{background:#e8e0d3;box-shadow:inset 0 2px 4px #30251f25;transform:translateY(1px)}
+.smart-box:focus-visible{outline:2px solid #8b694c;outline-offset:-3px}
+@media(prefers-reduced-motion:no-preference){.smart-box{transition:background .15s,box-shadow .15s,transform .15s}}

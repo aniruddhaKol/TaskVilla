@@ -1,0 +1,17 @@
+{
+  "application": "TaskVilla",
+  "version": "0.28.0",
+  "versionCode": 28,
+  "package": "app.adc.taskvilla",
+  "author": "Aniruddha DuttaChowdhury",
+  "brand": "ADChowdhury",
+  "apkSHA256": "d763b3009bc25f36c0b26f35e139f19bbc49fd5dfd9567564a0106fab01eb296",
+  "certificateSHA256": "fa5cf9a1d95a29fc2241b9fb090f3248cc38555cec60e992a0ba38ecc4ddfc79",
+  "sqliteSchema": 3,
+  "backupFormat": 2,
+  "homeShortcuts": [
+    "Today",
+    "Planned",
+    "Favourites"
+  ]
+}

@@ -1,6 +1,6 @@
 # TaskVilla — next-release attachment requirements
 
-Requested by the owner on 15 October 2026. Planning record only; do not implement until the next release is authorized.
+Historical planning record from 15 October 2026. Implemented in local builds 0.25–0.28; see docs/releases/v0.28.0.md and the current README for present behavior. The requirements below describe the original request, not outstanding work.
 
 - Attach file currently does not work as expected; repair the complete attachment flow.
 - Support selecting and attaching multiple files to a task.
