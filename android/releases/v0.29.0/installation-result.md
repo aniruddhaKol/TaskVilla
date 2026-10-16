@@ -1,0 +1,3 @@
+# TaskVilla 0.29.0 installation
+
+Installed successfully on the connected Android phone on 16 October 2026 using adb install -r. Package app.adc.taskvilla reports versionName 0.29.0 / versionCode 29. Existing review signature preserved. All database and private-file SHA256 hashes matched before/after installation, before app launch. App launch succeeded. No data reset or uninstall was used. Existing theme selection was preserved; select BookShelves in Settings to apply it. No Git commit or push was performed.

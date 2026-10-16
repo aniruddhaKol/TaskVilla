@@ -1,12 +1,12 @@
 # TaskVilla
 
-Android application. Current code and review APK: 0.28.0.
+Android application. Current code and review APK: 0.29.0.
 
-[Download current review APK](https://github.com/aniruddhaKol/taskvilla/raw/refs/heads/main/android/releases/v0.28.0/taskvilla-v0.28.0.apk)
+[Download current review APK](https://github.com/aniruddhaKol/taskvilla/raw/refs/heads/main/android/releases/v0.29.0/taskvilla-v0.29.0.apk)
 
 The latest separately published GitHub release remains [v0.24.0](https://github.com/aniruddhaKol/taskvilla/releases/tag/v0.24.0).
 
-<img src="previews/home-v0.28.0.png" alt="TaskVilla screenshot" width="360">
+<img src="previews/home-v0.29.0.png" alt="TaskVilla screenshot" width="360">
 
 ## Layout
 
@@ -31,7 +31,7 @@ Original APKs are preserved unchanged. The existing signed APK is available from
 
 ## Current review release
 
-Version 0.28.0 (versionCode 28) adds SMSAnalyzer-style Today, Planned and Favourites boxes. Favourites shows incomplete starred tasks, including those without due dates. See [release notes](docs/releases/v0.28.0.md) and [validation](docs/taskvilla-v0280-validation.md).
+Version 0.29.0 (versionCode 29) adds the approved BookShelves theme and a 2×2 theme grid, with consistent theme surfaces while preserving button styles and list-colour banners. Installed on the review phone with database and private-file hashes unchanged. The home screen retains SMSAnalyzer-style Today, Planned and Favourites boxes. Favourites shows incomplete starred tasks, including those without due dates. See [release notes](docs/releases/v0.29.0.md) and [validation](docs/taskvilla-v0280-validation.md).
 
 Task/list editors protect unsaved changes with Discard/Save. Tasks support up to 10 private attachment copies, each at most 10 MB, newest first, with confirmed removal and individual file sharing. Matching size and CRC32 block duplicates within the same task only; the user-facing notice is “Same file already attached”. The same file can be attached to another task. After successful SQLite persistence, task/list deletion removes unreferenced private copies while keeping other tasks and active drafts; device originals are retained. Export format 2 includes attachment metadata, not file bytes. Dates use an explicit native picker and dd-MMM-yyyy display.
 

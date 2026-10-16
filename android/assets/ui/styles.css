@@ -209,3 +209,20 @@ button:focus-visible{outline:2px solid #b89168;outline-offset:2px}
 .smart-box:hover{background:#f2ebdf}.smart-box:active{background:#e8e0d3;box-shadow:inset 0 2px 4px #30251f25;transform:translateY(1px)}
 .smart-box:focus-visible{outline:2px solid #8b694c;outline-offset:-3px}
 @media(prefers-reduced-motion:no-preference){.smart-box{transition:background .15s,box-shadow .15s,transform .15s}}
+
+/* v0.29: approved BookShelves texture and shared application chrome. */
+#app{--theme-texture:url('assets/taskvilla-wood.png');--theme-chrome:#503526;--theme-overlay:#24160fcc;--theme-border:#a88c76;--settings-surface:#e1dbce}
+#app[data-theme="stone"]{--theme-texture:url('assets/taskvilla-stone.png');--theme-chrome:#45433e;--theme-overlay:#26251fce;--theme-border:#a7a28f;--settings-surface:#d8d7cf}
+#app[data-theme="brick"]{--theme-texture:url('assets/taskvilla-brick.png');--theme-chrome:#573d32;--theme-overlay:#321b16ce;--theme-border:#bb8d75;--settings-surface:#e0d1c6}
+#app[data-theme="bookshelves"]{--theme-texture:url('assets/taskvilla-bookshelves.png');--theme-chrome:#503321;--theme-overlay:#24160fcc;--theme-border:#be9467;--settings-surface:#dcd0bf}
+.device[data-theme="bookshelves"]{background:#503321 var(--theme-texture) center/cover}
+.device[data-theme] .brand-header,.device[data-theme]:not(.list-themed) .mobile-header,.device[data-theme] .sticky-action,.device[data-theme] .settings-author{background-color:var(--theme-chrome);background-image:linear-gradient(var(--theme-overlay),var(--theme-overlay)),var(--theme-texture);background-size:cover;background-position:center;color:#fff8ef;border-color:var(--theme-border)}
+.device.settings-screen{background:var(--settings-surface)!important}
+.theme-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.settings-layout .theme-preview{height:72px;background-size:cover;background-position:center}
+.theme-bookshelves{background-image:url('assets/taskvilla-bookshelves.png')}
+.device .settings-switch input:checked+.toggle-track,.device .check.checked{background-color:var(--theme-chrome);background-image:linear-gradient(#0003,#0003),var(--theme-texture);background-size:cover;color:#fff8ef;border-color:var(--theme-border)}
+.device .settings-switch input:focus-visible+.toggle-track{outline-color:var(--theme-chrome);outline-offset:-2px}
+.device .refresh-indicator,#app .toast{background-color:var(--theme-chrome);background-image:linear-gradient(var(--theme-overlay),var(--theme-overlay)),var(--theme-texture);background-size:cover;color:#fff8ef;border:1px solid var(--theme-border)}
+.device .section-link{color:#fff8ef;text-shadow:0 1px 3px #24160f}
+.theme-choice:focus-visible{outline:2px solid var(--theme-chrome);outline-offset:-3px}

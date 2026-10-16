@@ -1,0 +1,18 @@
+{
+  "application": "TaskVilla",
+  "version": "0.29.0",
+  "versionCode": 29,
+  "package": "app.adc.taskvilla",
+  "author": "Aniruddha DuttaChowdhury",
+  "brand": "ADChowdhury",
+  "apkSHA256": "79c6837805b6d95c3f347450b0432434a380d83b20a38ed698ea1ac6f2370de3",
+  "certificateSHA256": "fa5cf9a1d95a29fc2241b9fb090f3248cc38555cec60e992a0ba38ecc4ddfc79",
+  "sqliteSchema": 3,
+  "backupFormat": 2,
+  "themes": [
+    "wood",
+    "stone",
+    "brick",
+    "bookshelves"
+  ]
+}
