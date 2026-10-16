@@ -1,0 +1,14 @@
+{
+  "application": "TaskVilla",
+  "version": "0.31.0",
+  "versionCode": 31,
+  "package": "app.adc.taskvilla",
+  "author": "Aniruddha DuttaChowdhury",
+  "brand": "ADChowdhury",
+  "apkSHA256": "2e891da92ed3e2b9fdb10e5171b94f5d0a490b1ca4da7405c664e0a7508fd27f",
+  "certificateSHA256": "fa5cf9a1d95a29fc2241b9fb090f3248cc38555cec60e992a0ba38ecc4ddfc79",
+  "installedOnReviewPhone": true,
+  "dataHashesUnchangedDuringInstall": true,
+  "sqliteSchema": 3,
+  "backupFormat": 2
+}

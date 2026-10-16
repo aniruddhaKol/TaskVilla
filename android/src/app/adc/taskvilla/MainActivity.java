@@ -50,7 +50,7 @@ public final class MainActivity extends Activity {
                 Uri uri=request.getUrl(); if(uri.toString().startsWith("file:///android_asset/ui/"))return false;
                 String scheme=uri.getScheme(),host=uri.getHost(); Intent intent=null;
                 if("https".equals(scheme) && ("www.linkedin.com".equals(host)||"wa.me".equals(host)))intent=new Intent(Intent.ACTION_VIEW,uri);
-                else if("mailto:a.d.chowdhury@gmail.com".equals(uri.toString()))intent=new Intent(Intent.ACTION_SENDTO,uri);
+                else if("mailto".equals(scheme) && "a.d.chowdhury@gmail.com".equals(android.net.MailTo.parse(uri.toString()).getTo()))intent=new Intent(Intent.ACTION_SENDTO,uri);
                 else if("tel:+919987484090".equals(uri.toString()))intent=new Intent(Intent.ACTION_DIAL,uri);
                 if(intent!=null)try{startActivity(intent);}catch(android.content.ActivityNotFoundException e){Toast.makeText(MainActivity.this,"No app available for this link",Toast.LENGTH_SHORT).show();}
                 return true;
