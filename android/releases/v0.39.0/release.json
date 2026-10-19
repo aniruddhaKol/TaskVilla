@@ -1,0 +1,12 @@
+{
+  "application": "TaskVilla",
+  "version": "0.39.0",
+  "versionCode": 39,
+  "package": "app.adc.taskvilla",
+  "author": "Aniruddha DuttaChowdhury",
+  "brand": "ADChowdhury",
+  "apkSHA256": "8f707cb9ba1752008ca425f07a0ab2bce9280152b655c63cec53a0bee55db45e",
+  "certificateSHA256": "fa5cf9a1d95a29fc2241b9fb090f3248cc38555cec60e992a0ba38ecc4ddfc79",
+  "sqliteSchema": 4,
+  "publication": "local-only"
+}

@@ -230,3 +230,62 @@ button:focus-visible{outline:2px solid #b89168;outline-offset:2px}
 #app .device .refresh-indicator{background-color:#fff!important;background-image:none!important;color:#30251f!important;border:1px solid #d8cfc4!important}
 #app .toast{background-color:#000!important;background-image:none!important;color:#fff!important;border:1px solid #333!important}
 .list-editor-actions{display:flex;align-items:stretch;gap:8px}.list-editor-actions>.button-primary{flex:1 1 0;width:0;min-width:0;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px}
+
+/* Settings and readable combined Help follow deployed SMSAnalyzer. */
+.device.settings-screen{background:var(--theme-chrome) var(--theme-texture) center/cover!important}
+.settings-screen .mobile-content{background:transparent}.settings-layout{gap:2px}
+.settings-card,.settings-author{margin:0}.app-summary>div{flex:1;min-width:0}
+.settings-help{margin-left:auto;flex:none;width:44px;height:44px;padding:4px;background:linear-gradient(#fffdf8,#eee5d9 55%,#d0c1b0);border:1px solid;border-color:#fff #a59487 #786354 #e8ddd1;border-radius:5px;box-shadow:inset 0 1px #fff,0 3px #786354;color:#503d2f}
+.settings-help .help-art{display:block;width:34px;height:34px;object-fit:contain}
+.help-overlay{position:absolute;inset:0;z-index:180;background:#0008;display:flex;align-items:center;justify-content:center;padding:18px 12px;--chrome:var(--theme-chrome);--control-border:var(--theme-border)}
+.help-dialog{display:flex;flex-direction:column;min-height:0;max-height:100%;width:100%;max-width:420px;background:#faf7f1;color:#30251f;border:1px solid #a59487;border-radius:10px;box-shadow:0 14px 48px #0008;overflow:hidden}
+.help-heading{flex:none;display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--theme-chrome);color:#fff8ef}
+.help-heading h2{display:flex;align-items:center;gap:9px;flex:1;min-width:0;font-size:16px;line-height:1.4;margin:0}
+.help-heading h2 img{width:28px;height:28px;object-fit:contain;flex:none}
+.help-heading .help-close{flex:none;font-size:26px;line-height:1;background:linear-gradient(#f5f6f3,#c3c7c1);color:#3e443c;border:1px solid #959c92;box-shadow:0 3px #535b50;border-radius:5px}
+.help-content{overflow:auto;min-height:0;padding:16px 12px 12px;overscroll-behavior:contain;scrollbar-gutter:stable}
+
+.help-doc{font:12px/1.65 'Roboto Mono',monospace;color:#30251f;overflow-wrap:anywhere}
+
+.help-doc header.hero{display:block;position:static;width:auto;height:auto;min-height:0;object-fit:initial;margin:0 0 18px;padding:12px;background:var(--help-chrome);color:#fff8ef;border:1px solid #b8a58c;border-radius:5px}
+
+.help-doc .by{margin:0;color:inherit}
+.help-doc .ver{display:inline-block;margin:0 5px;padding:1px 6px;border:1px solid #9cac86;border-radius:4px;background:#e5ecd9;color:#294122;font-size:11px;font-weight:600}
+
+.help-doc fieldset{min-width:0;margin:0 0 16px;padding:7px 12px 12px;background:#faf7f1;border:1px solid #b8a58c;border-radius:5px}
+
+.help-doc legend{max-width:100%;padding:3px 9px;background:#e5ecd9;color:#294122;border:1px solid #9cac86;border-left:3px solid #65844b;border-radius:4px;font-size:12px;font-weight:700}
+
+.help-doc h3{margin:13px 0 5px;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#786859}
+.help-doc ul{margin:7px 0 0;padding-left:18px}
+.help-doc li{margin:4px 0}
+.help-doc li::marker{color:#65844b}
+
+.help-doc dl.screens{margin:8px 0 0}
+.help-doc dt{margin-top:14px;font-weight:700;color:var(--help-chrome)}
+.help-doc dt:first-child{margin-top:0}
+.help-doc dd{margin:4px 0 0 4px;padding-left:10px;border-left:2px solid #a98657}
+.help-doc dd p{margin:0}
+.help-doc dd ul{margin-top:4px}
+
+.help-doc table.ts{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px}
+.help-doc table.ts th,.help-doc table.ts td{text-align:left;padding:8px 6px;border:0;vertical-align:top}
+.help-doc table.ts th{width:34%;color:var(--help-chrome);font-weight:600}
+.help-doc table.ts tr:nth-child(odd){background:#f0ebe3}
+
+.help-doc footer{padding:10px;background:var(--help-chrome);color:#fff8ef;border:1px solid #b8a58c;border-radius:5px;text-align:center;font-size:10px}
+
+.help-doc{--help-chrome:var(--chrome)}
+
+.help-doc legend{background:var(--chrome);color:#fff8ef;border-color:var(--control-border,#b59473);border-left-color:var(--control-border,#b59473)}
+
+.help-doc li::marker{color:var(--chrome)}
+.help-doc dd{border-left-color:var(--chrome)}
+
+.help-doc footer{background:var(--chrome);border-color:var(--control-border,#b59473)}
+
+.help-doc fieldset{margin:0 0 16px;padding:8px 12px 13px;border-color:#d6cabb;box-shadow:none;background:#fffdf8}
+
+.help-doc legend{padding:2px 7px;background:#faf7f1;color:var(--chrome);border:0;border-radius:0;font-size:12px}
+
+.help-doc footer{background:#eee8de;color:#503d2f;border:0;border-top:1px solid #d6cabb;border-radius:4px;padding:12px 8px}
