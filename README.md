@@ -1,10 +1,10 @@
 # TaskVilla
 
-Android application. Current code and review APK: 0.31.0.
+Android application. Current code and review APK: 0.38.0.
 
-[Download current review APK](https://github.com/aniruddhaKol/TaskVilla/raw/refs/heads/main/android/releases/v0.31.0/taskvilla-v0.31.0.apk)
+[Download current review APK](https://github.com/aniruddhaKol/TaskVilla/raw/refs/heads/main/android/releases/v0.38.0/taskvilla-v0.38.0.apk)
 
-Latest published release: [v0.31.0](https://github.com/aniruddhaKol/TaskVilla/releases/tag/v0.31.0).
+Latest published release: [v0.38.0](https://github.com/aniruddhaKol/TaskVilla/releases/tag/v0.38.0).
 
 <img src="previews/home-v0.29.0.png" alt="TaskVilla screenshot" width="360">
 
@@ -31,7 +31,7 @@ Original APKs are preserved unchanged. The existing signed APK is available from
 
 ## Current review release
 
-Version 0.31.0 (versionCode 31) adds a prefilled support email and unsaved-change prompts on task/list creation, retaining the approved BookShelves theme and a 2×2 theme grid, with consistent theme surfaces while preserving button styles and list-colour banners. Installed on the review phone with database and private-file hashes unchanged. The home screen retains SMSAnalyzer-style Today, Planned and Favourites boxes. Favourites shows incomplete starred tasks, including those without due dates. See [release notes](docs/releases/v0.31.0.md) and [validation](docs/taskvilla-v0280-validation.md).
+Version 0.38.0 (versionCode 38) includes the personal Activity Tracker with catalogue autocomplete, dated entries, history, per-entry line charts and period filters. Tracker tabs and compact edit/delete controls follow SMSAnalyzer conventions. All Trend amounts round upward to whole rupees while stored paise retain precision. List forms use equal Cancel/Save actions; refresh feedback stays white and bottom toasts black across all four themes. Lists can insert new tasks at the top, notes use comment threads, and extensive copy contains only Task Name, Due Date and Tags. See [release notes](docs/releases/v0.38.0.md) and [existing validation](docs/taskvilla-v0380-validation.md). This publication reuses the existing signed APK without rebuilding or rerunning checks; no phone installation was performed.
 
 Task/list creation and editing protect unsaved changes with Discard/Save. Tasks support up to 10 private attachment copies, each at most 10 MB, newest first, with confirmed removal and individual file sharing. Matching size and CRC32 block duplicates within the same task only; the user-facing notice is “Same file already attached”. The same file can be attached to another task. After successful SQLite persistence, task/list deletion removes unreferenced private copies while keeping other tasks and active drafts; device originals are retained. Export format 2 includes attachment metadata, not file bytes. Dates use an explicit native picker and dd-MMM-yyyy display.
 

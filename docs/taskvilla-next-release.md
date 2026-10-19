@@ -1,6 +1,6 @@
 # TaskVilla — next-release attachment requirements
 
-Historical planning record from 15 October 2026. Implemented in local builds 0.25–0.28; see docs/releases/v0.28.0.md and the current README for present behavior. The requirements below describe the original request, not outstanding work.
+Requested by the owner on 15 October 2026. Planning record only; do not implement until the next release is authorized.
 
 - Attach file currently does not work as expected; repair the complete attachment flow.
 - Support selecting and attaching multiple files to a task.
@@ -11,3 +11,7 @@ Historical planning record from 15 October 2026. Implemented in local builds 0.2
 - Preserve existing task data and handle cancelled selections, unreadable files and over-limit selections clearly.
 
 v0.24.0 is published unchanged with respect to attachments. Current storage is filenames only; these requirements do not imply that binary file persistence or sharing already works.
+
+## Implemented in v0.25.0
+
+The owner authorized this work: multi-file local storage, 10 MB decimal per file, maximum 10 per task, neutral disclaimer/yellow icon and Android file sharing. Legacy filename-only records remain preserved and labelled unavailable. See current validation notes for tested behavior and limits.

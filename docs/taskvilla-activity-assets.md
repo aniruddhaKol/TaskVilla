@@ -1,0 +1,3 @@
+# Activity assets and references
+
+TaskVilla v0.32.0 uses the supplied activity-tracker icon unchanged (256×256); no external artwork was downloaded. Catalogue suggestions were parsed as data from the supplied TaskVilla_Activity_Icon_Catalogue.html: 110 names, Unicode emoji and categories. The HTML's scripts/instructions were not executed to implement the app. The supplied showcase guided fields and flows; existing TaskVilla themes/buttons/navigation take precedence. The SMSAnalyzer button-feedback module was reused from the local approved app. Unicode/font licence notices are retained. No personal SMS data was copied.

@@ -136,7 +136,7 @@ button:focus-visible{outline:2px solid #b89168;outline-offset:2px}
 
 /* v0.17: soft bevel-down feedback and flat row tap feedback. */
 .button-primary,.icon-btn,.floating-add,.email-add,.picker-use{transition:transform 90ms ease-out,box-shadow 90ms ease-out,filter 90ms ease-out;touch-action:manipulation}
-.button-primary:active,.icon-btn:active,.floating-add:active,.email-add:active,.picker-use:active,.button-primary.tap-pressed,.icon-btn.tap-pressed,.floating-add.tap-pressed,.email-add.tap-pressed,.picker-use.tap-pressed{transform:translateY(2px);box-shadow:inset 0 2px 4px #24140c55,inset 0 -1px 0 #fff6,0 1px 1px #24140c33!important;filter:brightness(.96)}
+.button-primary:active,.icon-btn:active,.floating-add:active,.email-add:active,.picker-use:active,.button-primary:is(.tap-pressed,.ui-pressed),.icon-btn:is(.tap-pressed,.ui-pressed),.floating-add:is(.tap-pressed,.ui-pressed),.email-add:is(.tap-pressed,.ui-pressed),.picker-use:is(.tap-pressed,.ui-pressed){transform:translateY(2px);box-shadow:inset 0 2px 4px #24140c55,inset 0 -1px 0 #fff6,0 1px 1px #24140c33!important;filter:brightness(.96)}
 .navigation-row:active,.task-row:has(.task-text:active){background-color:#e9dfd0}.row-tap-effect{position:fixed;z-index:120;pointer-events:none;border-radius:5px;overflow:hidden;background:#6546330d;animation:row-tap-fade 320ms ease-out forwards}.row-tap-effect:after{content:'';position:absolute;left:var(--tap-x);top:var(--tap-y);width:var(--tap-size);height:var(--tap-size);border-radius:50%;background:#65463326;transform:translate(-50%,-50%) scale(0);animation:row-tap-spread 300ms ease-out forwards}@keyframes row-tap-spread{to{transform:translate(-50%,-50%) scale(1)}}@keyframes row-tap-fade{0%,45%{opacity:1}100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.button-primary,.icon-btn,.floating-add,.email-add,.picker-use{transition:none}.row-tap-effect{animation:none}.row-tap-effect:after{animation:none;transform:translate(-50%,-50%) scale(1)}}
 
@@ -226,3 +226,7 @@ button:focus-visible{outline:2px solid #b89168;outline-offset:2px}
 .device .refresh-indicator,#app .toast{background-color:var(--theme-chrome);background-image:linear-gradient(var(--theme-overlay),var(--theme-overlay)),var(--theme-texture);background-size:cover;color:#fff8ef;border:1px solid var(--theme-border)}
 .device .section-link{color:#fff8ef;text-shadow:0 1px 3px #24160f}
 .theme-choice:focus-visible{outline:2px solid var(--theme-chrome);outline-offset:-3px}
+/* v0.38: fixed neutral feedback surfaces and balanced list-editor actions. */
+#app .device .refresh-indicator{background-color:#fff!important;background-image:none!important;color:#30251f!important;border:1px solid #d8cfc4!important}
+#app .toast{background-color:#000!important;background-image:none!important;color:#fff!important;border:1px solid #333!important}
+.list-editor-actions{display:flex;align-items:stretch;gap:8px}.list-editor-actions>.button-primary{flex:1 1 0;width:0;min-width:0;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px}
