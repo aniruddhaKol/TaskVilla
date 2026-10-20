@@ -41,9 +41,10 @@
       state.list=l.id;destination=destination||'lists';
     }else if(state.screen==='listoptions'){
       const name=document.getElementById('list-name');if(!requireValue(name))return false;
-      if(value('invite-email').trim()&&!addInviteeDraft())return false;capture();const d=session.draft,l=list(),old=copy(l);
+      if(value('invite-email').trim()&&!addInviteeDraft())return false;capture();const d=session.draft,l=list(),old=copy(l),oldOrder=[...tasks];
+      if(!!l.latestTaskOnTop!==!!d.latestTaskOnTop){const reversed=tasks.filter(t=>t.list===l.id).reverse();let i=0;for(let j=0;j<tasks.length;j++)if(tasks[j].list===l.id)tasks[j]=reversed[i++]}
       Object.assign(l,{name:d.name.trim(),icon:d.icon,colour:d.colour,latestTaskOnTop:d.latestTaskOnTop,invitees:l.joined?l.invitees:[...d.invitees],shared:!!l.joined||d.invitees.length>0});
-      if(!persistLocal()){for(const key of Object.keys(l))delete l[key];Object.assign(l,old);notice('Could not save. Your changes are still here.');return false}
+      if(!persistLocal()){for(const key of Object.keys(l))delete l[key];Object.assign(l,old);tasks.splice(0,tasks.length,...oldOrder);notice('Could not save. Your changes are still here.');return false}
     }else{
       const p=state.screen==='task'?'edit':'task',name=document.getElementById(p==='edit'?'edit-title':'task-title');if(!requireValue(name))return false;if(name.value.length>100){markFieldInvalid(name);name.focus();notice('Task name must be 100 characters or fewer.');return false}if(!commitComment())return false;capture();
       for(const el of document.querySelectorAll('.detail-sheet input:not([type=file]),.detail-sheet textarea,.detail-sheet select'))if(!el.checkValidity()){markFieldInvalid(el);el.focus();return false}

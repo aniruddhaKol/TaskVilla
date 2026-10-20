@@ -310,3 +310,12 @@ button:focus-visible{outline:2px solid #b89168;outline-offset:2px}
 .preferences-card>.settings-row,.preferences-card>.settings-row:first-child{margin:0;min-height:54px;padding:12px 0;align-items:center}
 .preferences-card>.settings-helper{margin:0 0 12px}
 .preferences-card>.settings-activity{margin:0 0 12px;padding:10px 12px;min-height:44px;gap:10px;border:1px solid;border-color:#fff #959c92 #535b50 #e4e8e1;border-radius:5px;background:linear-gradient(#f5f6f3,#e2e4e0 48%,#c3c7c1);color:#3e443c;box-shadow:inset 0 1px #fff,0 3px #535b50}
+
+.appearance-selectors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:stretch}
+.appearance-selectors .appearance-choice{width:100%;min-width:0;gap:6px;padding:8px;margin-bottom:5px}
+.appearance-selectors .choice-text{min-width:0;font-size:11px;line-height:1.5}
+.appearance-selectors .appearance-icon{width:24px;flex:none}.appearance-selectors .appearance-swatch{width:22px;height:22px;flex:none}
+.appearance-selectors .appearance-choice>.ic{width:14px;height:14px;flex:none;margin-left:auto}
+
+.brand-header .icon-btn[data-go="settings"]{padding:1px;display:grid;place-items:center}
+.brand-header .icon-btn .settings-gear-art{display:block;width:32px;height:32px;max-width:100%;object-fit:contain;margin:0;border:0;border-radius:0;filter:none}
