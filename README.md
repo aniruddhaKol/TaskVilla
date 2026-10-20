@@ -1,10 +1,10 @@
 # TaskVilla
 
-Android application. Current code and review APK: 0.39.0.
+Android application. Current code and review APK: 0.40.0.
 
-[Download current review APK](https://github.com/aniruddhaKol/TaskVilla/raw/refs/heads/main/android/releases/v0.39.0/taskvilla-v0.39.0.apk)
+[Download current review APK](https://github.com/aniruddhaKol/TaskVilla/raw/refs/heads/main/android/releases/v0.40.0/taskvilla-v0.40.0.apk)
 
-Latest published release: [v0.39.0](https://github.com/aniruddhaKol/TaskVilla/releases/tag/v0.39.0).
+Latest published release: [v0.40.0](https://github.com/aniruddhaKol/TaskVilla/releases/tag/v0.40.0).
 
 <img src="previews/home-v0.29.0.png" alt="TaskVilla screenshot" width="360">
 
@@ -31,9 +31,9 @@ Original APKs are preserved unchanged. The existing signed APK is available from
 
 ## Current review release
 
-Version 0.39.0 (versionCode 39) gives Settings 2px card gaps and the selected theme background, removes “Offline SQLite” from the summary, and adds SMSAnalyzer's sculpted help button. Combined About, Help and Privacy uses readable cream fieldsets, a themed heading and full-author footer. Help supports scrolling, Close, Escape and Android Back dismissal. Existing Activity Tracker, tasks, attachments and themes are preserved. See [release notes](docs/releases/v0.39.0.md) and [validation](docs/taskvilla-v0390-validation.md).
+Version 0.40.0 (versionCode 40) moves Activity into the second Settings block below Reminders, with SMSAnalyzer's 12px horizontal padding, 12px row padding and minimum 54px row height. Themed backgrounds, 2px card gaps, combined Help and other features remain. See [release notes](docs/releases/v0.40.0.md).
 
-The existing signed APK was installed as an update; private database/file hashes were unchanged immediately after installation. Browser checks passed across four themes at 320/390/412px. The phone was locked, so live help rendering and native Back behavior remain unverified. This publication reuses that APK without rebuilding.
+The existing signed APK was installed as an update; private database/file hashes were unchanged immediately after installation. Browser layout/navigation checks passed and the screenshot was reviewed. The phone was locked, so no live visual verification is claimed. This publication reuses the existing APK without rebuilding.
 
 Task/list creation and editing protect unsaved changes with Discard/Save. Tasks support up to 10 private attachment copies, each at most 10 MB, newest first, with confirmed removal and individual file sharing. Matching size and CRC32 block duplicates within the same task only; the user-facing notice is “Same file already attached”. The same file can be attached to another task. After successful SQLite persistence, task/list deletion removes unreferenced private copies while keeping other tasks and active drafts; device originals are retained. Export format 2 includes attachment metadata, not file bytes. Dates use an explicit native picker and dd-MMM-yyyy display.
 

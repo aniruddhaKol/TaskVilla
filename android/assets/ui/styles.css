@@ -244,48 +244,69 @@ button:focus-visible{outline:2px solid #b89168;outline-offset:2px}
 .help-heading h2 img{width:28px;height:28px;object-fit:contain;flex:none}
 .help-heading .help-close{flex:none;font-size:26px;line-height:1;background:linear-gradient(#f5f6f3,#c3c7c1);color:#3e443c;border:1px solid #959c92;box-shadow:0 3px #535b50;border-radius:5px}
 .help-content{overflow:auto;min-height:0;padding:16px 12px 12px;overscroll-behavior:contain;scrollbar-gutter:stable}
-
+
+
 .help-doc{font:12px/1.65 'Roboto Mono',monospace;color:#30251f;overflow-wrap:anywhere}
-
+
+
 .help-doc header.hero{display:block;position:static;width:auto;height:auto;min-height:0;object-fit:initial;margin:0 0 18px;padding:12px;background:var(--help-chrome);color:#fff8ef;border:1px solid #b8a58c;border-radius:5px}
-
+
+
 .help-doc .by{margin:0;color:inherit}
 .help-doc .ver{display:inline-block;margin:0 5px;padding:1px 6px;border:1px solid #9cac86;border-radius:4px;background:#e5ecd9;color:#294122;font-size:11px;font-weight:600}
-
+
+
 .help-doc fieldset{min-width:0;margin:0 0 16px;padding:7px 12px 12px;background:#faf7f1;border:1px solid #b8a58c;border-radius:5px}
-
+
+
 .help-doc legend{max-width:100%;padding:3px 9px;background:#e5ecd9;color:#294122;border:1px solid #9cac86;border-left:3px solid #65844b;border-radius:4px;font-size:12px;font-weight:700}
-
+
+
 .help-doc h3{margin:13px 0 5px;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#786859}
 .help-doc ul{margin:7px 0 0;padding-left:18px}
 .help-doc li{margin:4px 0}
 .help-doc li::marker{color:#65844b}
-
+
+
 .help-doc dl.screens{margin:8px 0 0}
 .help-doc dt{margin-top:14px;font-weight:700;color:var(--help-chrome)}
 .help-doc dt:first-child{margin-top:0}
 .help-doc dd{margin:4px 0 0 4px;padding-left:10px;border-left:2px solid #a98657}
 .help-doc dd p{margin:0}
 .help-doc dd ul{margin-top:4px}
-
+
+
 .help-doc table.ts{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px}
 .help-doc table.ts th,.help-doc table.ts td{text-align:left;padding:8px 6px;border:0;vertical-align:top}
 .help-doc table.ts th{width:34%;color:var(--help-chrome);font-weight:600}
 .help-doc table.ts tr:nth-child(odd){background:#f0ebe3}
-
+
+
 .help-doc footer{padding:10px;background:var(--help-chrome);color:#fff8ef;border:1px solid #b8a58c;border-radius:5px;text-align:center;font-size:10px}
-
+
+
 .help-doc{--help-chrome:var(--chrome)}
-
+
+
 .help-doc legend{background:var(--chrome);color:#fff8ef;border-color:var(--control-border,#b59473);border-left-color:var(--control-border,#b59473)}
-
+
+
 .help-doc li::marker{color:var(--chrome)}
 .help-doc dd{border-left-color:var(--chrome)}
-
+
+
 .help-doc footer{background:var(--chrome);border-color:var(--control-border,#b59473)}
-
+
+
 .help-doc fieldset{margin:0 0 16px;padding:8px 12px 13px;border-color:#d6cabb;box-shadow:none;background:#fffdf8}
-
+
+
 .help-doc legend{padding:2px 7px;background:#faf7f1;color:var(--chrome);border:0;border-radius:0;font-size:12px}
-
+
+
 .help-doc footer{background:#eee8de;color:#503d2f;border:0;border-top:1px solid #d6cabb;border-radius:4px;padding:12px 8px}
+/* Match SMSAnalyzer Settings options padding; Activity belongs with preferences. */
+.preferences-card{padding:0 12px}
+.preferences-card>.settings-row,.preferences-card>.settings-row:first-child{margin:0;min-height:54px;padding:12px 0;align-items:center}
+.preferences-card>.settings-helper{margin:0 0 12px}
+.preferences-card>.settings-activity{margin:0 0 12px;padding:10px 12px;min-height:44px;gap:10px;border:1px solid;border-color:#fff #959c92 #535b50 #e4e8e1;border-radius:5px;background:linear-gradient(#f5f6f3,#e2e4e0 48%,#c3c7c1);color:#3e443c;box-shadow:inset 0 1px #fff,0 3px #535b50}
