@@ -1,10 +1,10 @@
 # TaskVilla
 
-Android application. Current code and review APK: 0.46.0.
+Android application. Current code and review APK: 0.47.0.
 
-[Download current review APK](https://github.com/aniruddhaKol/TaskVilla/raw/refs/heads/main/android/releases/v0.46.0/taskvilla-v0.46.0.apk)
+[Download current review APK](https://github.com/aniruddhaKol/TaskVilla/raw/refs/heads/main/android/releases/v0.47.0/taskvilla-v0.47.0.apk)
 
-Latest published release: [v0.46.0](https://github.com/aniruddhaKol/TaskVilla/releases/tag/v0.46.0).
+Latest published release: [v0.47.0](https://github.com/aniruddhaKol/TaskVilla/releases/tag/v0.47.0).
 
 <img src="previews/home-v0.29.0.png" alt="TaskVilla screenshot" width="360">
 
@@ -31,9 +31,9 @@ Original APKs are preserved unchanged. The existing signed APK is available from
 
 ## Current review release
 
-Version 0.46.0 (versionCode 46) introduces the approved wooden Settings gear and task-order artwork. Latest task on top uses a themed switch; changing it reverses existing task order when saved, while enabled lists insert new tasks first. List options has paired icon/theme selectors with down arrows. Create task and task edit have equal-width Cancel/Save controls with existing validation and unsaved-change protection. See [release notes](docs/releases/v0.46.0.md).
+Version 0.47.0 (versionCode 47) matches SMSAnalyzer's Settings theme grid: Wood and BookShelves on the first row; Brick and Stone on the second. Saved themes and other features are preserved. See [release notes](docs/releases/v0.47.0.md).
 
-This publication uses the existing signed APK without rebuilding. Signature and packaged assets were checked during local release preparation. Focused ordering and selector checks passed for 0.42.0; later visual changes have no additional runtime coverage. No phone installation was performed for this publication.
+This publication reuses the existing signed APK and source bundle. No rebuild, tests or phone installation were performed during publication.
 
 Task/list creation and editing protect unsaved changes with Discard/Save. Tasks support up to 10 private attachment copies, each at most 10 MB, newest first, with confirmed removal and individual file sharing. Matching size and CRC32 block duplicates within the same task only; the user-facing notice is “Same file already attached”. The same file can be attached to another task. After successful SQLite persistence, task/list deletion removes unreferenced private copies while keeping other tasks and active drafts; device originals are retained. Export format 2 includes attachment metadata, not file bytes. Dates use an explicit native picker and dd-MMM-yyyy display.
 
