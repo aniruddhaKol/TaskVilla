@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sharing result",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "shared",
+        "revoked",
+        "listed"
+      ]
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Member",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": { "type": "string", "format": "uuid" },
+          "email": { "type": "string", "format": "email" },
+          "permission": { "type": "string", "enum": ["owner", "editor"] }
+        },
+        "required": ["userId", "email", "permission"]
+      }
+    },
+    "memberUserId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "email": { "type": "string", "format": "email" },
+    "shareId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "sharedLists": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "listId": { "type": "string", "format": "uuid" },
+          "email": { "type": "string", "format": "email" },
+          "permission": { "type": "string", "enum": ["editor"] }
+        },
+        "required": ["listId", "email", "permission"]
+      }
+    },
+    "shares": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "shareId": { "type": "string", "format": "uuid" },
+          "email": { "type": "string", "format": "email" },
+          "permission": { "type": "string", "enum": ["editor"] },
+          "createdAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["shareId", "email", "permission", "createdAt"]
+      }
+    }
+  },
+  "required": [
+    "status"
+  ]
+}

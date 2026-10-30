@@ -10,7 +10,7 @@ import java.util.zip.CRC32;
 
 /** Bounded private copies, never base64 across the bridge. Aniruddha DuttaChowdhury · ADChowdhury. */
 final class AttachmentStore {
- static final long MAX_BYTES=10000000L; static final int MAX_FILES=10;
+ static final long MAX_BYTES=2000000L; static final int MAX_FILES=10;
  static File root(Context c){return new File(c.getFilesDir(),"attachments");}
  static File directory(Context c,String id)throws IOException{if(id==null||!id.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))throw new IOException("Invalid attachment");return new File(root(c),id);}
  static File content(Context c,String id)throws IOException{File f=new File(directory(c,id),"content");if(!f.isFile())throw new FileNotFoundException("Attachment unavailable");return f;}
@@ -20,14 +20,15 @@ final class AttachmentStore {
  static JSONObject importFile(Context c,Uri uri,Set<String> staged)throws Exception{
   String name="Attachment",mime=c.getContentResolver().getType(uri);long declared=-1;
   try(Cursor rows=c.getContentResolver().query(uri,new String[]{OpenableColumns.DISPLAY_NAME,OpenableColumns.SIZE},null,null,null)){if(rows!=null&&rows.moveToFirst()){int ni=rows.getColumnIndex(OpenableColumns.DISPLAY_NAME),si=rows.getColumnIndex(OpenableColumns.SIZE);if(ni>=0&&!rows.isNull(ni))name=rows.getString(ni);if(si>=0&&!rows.isNull(si))declared=rows.getLong(si);}}
-  if(declared>MAX_BYTES)throw new IOException("Each file must be 10 MB or smaller. No files were added.");
+  if(declared>MAX_BYTES)throw new IOException("Each file must be 2 MB or smaller. No files were added.");
   name=name.replaceAll("[\\p{Cntrl}/\\\\]","_");if(name.length()>180)name=name.substring(0,180);if(name.trim().isEmpty())name="Attachment";
   String id=UUID.randomUUID().toString();File dir=directory(c,id);staged.add(id);if(!dir.mkdirs()){staged.remove(id);throw new IOException("Could not store the file");}
-  try{long total=0;CRC32 crc=new CRC32();try(InputStream in=c.getContentResolver().openInputStream(uri);OutputStream out=new FileOutputStream(new File(dir,"content"))){if(in==null)throw new IOException("Could not read the selected file");byte[] b=new byte[32768];int n;while((n=in.read(b))!=-1){total+=n;if(total>MAX_BYTES)throw new IOException("Each file must be 10 MB or smaller. No files were added.");crc.update(b,0,n);out.write(b,0,n);}}
+  try{long total=0;CRC32 crc=new CRC32();try(InputStream in=c.getContentResolver().openInputStream(uri);OutputStream out=new FileOutputStream(new File(dir,"content"))){if(in==null)throw new IOException("Could not read the selected file");byte[] b=new byte[32768];int n;while((n=in.read(b))!=-1){total+=n;if(total>MAX_BYTES)throw new IOException("Each file must be 2 MB or smaller. No files were added.");crc.update(b,0,n);out.write(b,0,n);}}
    JSONObject meta=new JSONObject().put("id",id).put("name",name).put("size",total).put("crc32",String.format(Locale.US,"%08x",crc.getValue())).put("mime",mime==null?"application/octet-stream":mime);writeMetadata(c,id,meta);return meta;
   }catch(Exception e){staged.remove(id);remove(c,id);throw e;}
  }
  static void writeMetadata(Context c,String id,JSONObject meta)throws Exception{try(OutputStream out=new FileOutputStream(new File(directory(c,id),"metadata.json"))){out.write(meta.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));}}
+ static JSONObject importCloud(Context c,String id,String name,String mime,long expected,InputStream in)throws Exception{if(expected<0||expected>MAX_BYTES)throw new IOException("Each file must be 2 MB or smaller.");File dir=directory(c,id);if(!dir.mkdirs())throw new IOException("Could not store the file");try{long total=0;CRC32 crc=new CRC32();try(OutputStream out=new FileOutputStream(new File(dir,"content"))){byte[] b=new byte[32768];int n;while((n=in.read(b))!=-1){total+=n;if(total>MAX_BYTES)throw new IOException("Each file must be 2 MB or smaller.");crc.update(b,0,n);out.write(b,0,n);}}if(total!=expected)throw new IOException("Downloaded attachment was incomplete.");JSONObject meta=new JSONObject().put("id",id).put("name",name).put("size",total).put("crc32",String.format(Locale.US,"%08x",crc.getValue())).put("mime",mime).put("cloudCached",true);writeMetadata(c,id,meta);return meta;}catch(Exception e){remove(c,id);throw e;}}
  static String fingerprint(Context c,String id)throws Exception{
   JSONObject meta=metadata(c,id);File file=content(c,id);String hex=meta.optString("crc32","");
   if(!hex.matches("[0-9a-f]{8}")||meta.optLong("size",-1)!=file.length()){
@@ -41,7 +42,7 @@ final class AttachmentStore {
   Set<String> seen=new HashSet<>();for(int i=0;i<existingIds.length();i++)try{seen.add(fingerprint(c,existingIds.getString(i)));}catch(Exception ignored){}
   JSONArray files=new JSONArray();ArrayList<String> created=new ArrayList<>();
   try{for(Uri uri:selected){JSONObject file=importFile(c,uri,staged);String id=file.getString("id");created.add(id);
-    if(!seen.add(file.getLong("size")+":"+file.getString("crc32")))throw new IOException("Same file already attached");files.put(file);
+    if(!seen.add(file.getLong("size")+":"+file.getString("crc32")))throw new IOException("Same file is already attached");files.put(file);
    }return files;
   }catch(Exception error){for(String id:created){staged.remove(id);remove(c,id);}throw error;}
  }
@@ -54,4 +55,5 @@ final class AttachmentStore {
   Intent send=new Intent(uris.size()==1?Intent.ACTION_SEND:Intent.ACTION_SEND_MULTIPLE).setType(mime).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);if(uris.size()==1)send.putExtra(Intent.EXTRA_STREAM,uris.get(0));else send.putParcelableArrayListExtra(Intent.EXTRA_STREAM,uris);
   ClipData clip=ClipData.newUri(c.getContentResolver(),"TaskVilla files",uris.get(0));for(int i=1;i<uris.size();i++)clip.addItem(new ClipData.Item(uris.get(i)));send.setClipData(clip);return Intent.createChooser(send,"Share files").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
  }
+ static Intent open(Context c,String id)throws Exception{JSONObject m=metadata(c,id);content(c,id);Uri uri=new Uri.Builder().scheme("content").authority(c.getPackageName()+".attachments").appendPath(id).appendPath(m.getString("name")).build();return Intent.createChooser(new Intent(Intent.ACTION_VIEW).setDataAndType(uri,m.optString("mime","application/octet-stream")).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION),"Open attachment").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);}
 }

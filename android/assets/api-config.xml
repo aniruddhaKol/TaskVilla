@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Public client configuration only. Never place a Supabase secret or service-role key here. -->
+<backend baseUrl="https://mbyyesfvbpdttztiopfd.supabase.co" publishableKey="sb_publishable_KryGUn6_1FoKqdzuaWVI5g_HPSIYvy8" schema="taskvilla">
+  <operation name="otpRequest" path="/auth/v1/otp" />
+  <operation name="otpVerify" path="/auth/v1/verify" />
+  <operation name="tokenRefresh" path="/auth/v1/token?grant_type=refresh_token" />
+  <operation name="syncPush" path="/rest/v1/rpc/sync_push" />
+  <operation name="syncPull" path="/rest/v1/rpc/sync_pull" />
+  <operation name="sharing" path="/rest/v1/rpc/manage_sharing" />
+  <operation name="favourites" path="/rest/v1/rpc/sync_favourites" />
+</backend>

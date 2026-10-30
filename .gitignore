@@ -16,3 +16,8 @@ local.properties
 **/unsigned.apk
 **/aligned.apk
 **/*-source.zip
+
+**/.temp/
+**/backups/
+**/node_modules/
+**/secrets.*

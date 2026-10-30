@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pull changes",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "deviceId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "cursor": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 500,
+      "default": 200
+    }
+  },
+  "required": [
+    "deviceId"
+  ]
+}

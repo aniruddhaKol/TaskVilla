@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Verify OTP",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^[0-9]{6,8}$"
+    },
+    "requestId": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "email",
+    "code"
+  ]
+}

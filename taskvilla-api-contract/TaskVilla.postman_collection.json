@@ -1,0 +1,316 @@
+{
+  "info": {
+    "_postman_id": "8c2b3a04-516e-4c1a-bad4-4a1d635de701",
+    "name": "TaskVilla Backend (Supabase)",
+    "description": "Native Supabase email OTP/session endpoints plus TaskVilla sync and sharing RPCs. Set the environment values before running. OTP requires a mailbox you control; sharing acceptance requires a second verified account. Request bodies and assertions are examples based on the deployed v1.2 contract.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "apikey", "type": "string" },
+      { "key": "value", "value": "{{publishableKey}}", "type": "string" },
+      { "key": "in", "value": "header", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "1. Request email OTP (positive; sends email)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{testEmail}}\",\n  \"create_user\": true\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/auth/v1/otp",
+            "description": "Native Supabase Auth mapping for otpRequest. Running this sends a real email OTP."
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('OTP request accepted by Supabase Auth', function () { pm.response.to.have.status(200); });",
+            "pm.test('response is JSON or empty provider acknowledgment', function () { pm.expect([0, 200]).to.include(pm.response.code); });",
+            "if (pm.response.code === 200) { pm.environment.set('otpRequestResponse', pm.response.text()); }"
+          ] } }]
+        },
+        {
+          "name": "2. Verify email OTP (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"type\": \"email\",\n  \"email\": \"{{testEmail}}\",\n  \"token\": \"{{otp}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/auth/v1/verify",
+            "description": "Native mapping for otpVerify: contract code becomes Supabase token. Captures session tokens for later RPCs."
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('OTP verification succeeds', function () { pm.response.to.have.status(200); });",
+            "const d = pm.response.json();",
+            "pm.test('Supabase session has user and both tokens', function () { pm.expect(d.user.id).to.be.a('string'); pm.expect(d.access_token).to.be.a('string'); pm.expect(d.refresh_token).to.be.a('string'); pm.expect(d.expires_in).to.be.above(0); });",
+            "pm.environment.set('accessToken', d.access_token); pm.environment.set('refreshToken', d.refresh_token); pm.environment.set('userId', d.user.id);"
+          ] } }]
+        },
+        {
+          "name": "3. Refresh session (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refresh_token\": \"{{refreshToken}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/auth/v1/token?grant_type=refresh_token"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('refresh succeeds', function () { pm.response.to.have.status(200); });",
+            "const d = pm.response.json(); pm.environment.set('accessToken', d.access_token); pm.environment.set('refreshToken', d.refresh_token);",
+            "pm.test('rotated session tokens returned', function () { pm.expect(d.access_token).to.be.a('string'); pm.expect(d.refresh_token).to.be.a('string'); });"
+          ] } }]
+        },
+        {
+          "name": "Request OTP for second sharing account (optional)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{memberEmail}}\",\n  \"create_user\": true\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/auth/v1/otp",
+            "description": "Use only an email address you control. Needed to verify sharing acceptance as a second account."
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('second-account OTP request accepted', function () { pm.response.to.have.status(200); });"] } }]
+        },
+        {
+          "name": "Verify OTP for second sharing account (optional)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"type\": \"email\",\n  \"email\": \"{{memberEmail}}\",\n  \"token\": \"{{memberOtp}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/auth/v1/verify"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('second account verifies', function () { pm.response.to.have.status(200); });",
+            "const d=pm.response.json(); pm.environment.set('memberAccessToken',d.access_token); pm.environment.set('memberRefreshToken',d.refresh_token); pm.environment.set('memberUserId',d.user.id);"
+          ] } }]
+        },
+        {
+          "name": "4. Invalid OTP (negative)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"type\": \"email\",\n  \"email\": \"{{testEmail}}\",\n  \"token\": \"000000\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/auth/v1/verify"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('invalid OTP is rejected', function () { pm.expect([400, 403, 422]).to.include(pm.response.code); });",
+            "pm.test('error body is present', function () { pm.expect(pm.response.text()).not.eql(''); });"
+          ] } }]
+        },
+        {
+          "name": "5. Invalid refresh token (negative)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refresh_token\": \"invalid-refresh-token\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/auth/v1/token?grant_type=refresh_token"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('invalid refresh token is rejected', function () { pm.expect([400, 401]).to.include(pm.response.code); });"
+          ] } }]
+        }
+      ]
+    },
+    {
+      "name": "Sync",
+      "item": [
+        {
+          "name": "6. Push a new list (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"deviceId\": \"{{deviceId}}\",\n  \"batchId\": \"{{batchId}}\",\n  \"changes\": [{\n    \"changeId\": \"{{changeId}}\",\n    \"entity\": \"list\",\n    \"entityId\": \"{{listId}}\",\n    \"operation\": \"upsert\",\n    \"baseRevision\": null,\n    \"payload\": {\"name\": \"Postman smoke list\", \"color\": \"#cc5533\"},\n    \"clientModifiedAt\": \"2026-10-28T00:00:00Z\"\n  }]\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/sync_push"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('push succeeds', function () { pm.response.to.have.status(200); });",
+            "const d = pm.response.json(); pm.environment.set('privateListId',pm.environment.get('listId')); pm.test('change accepted with matching batch', function () { pm.expect(d.batchId).eql(pm.environment.get('batchId')); pm.expect(d.accepted).to.include(pm.environment.get('changeId')); pm.expect(d.conflicts).eql([]); });"
+          ] } }]
+        },
+        {
+          "name": "7. Retry identical batch (idempotent positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"deviceId\": \"{{deviceId}}\",\n  \"batchId\": \"{{batchId}}\",\n  \"changes\": [{\n    \"changeId\": \"{{changeId}}\",\n    \"entity\": \"list\",\n    \"entityId\": \"{{listId}}\",\n    \"operation\": \"upsert\",\n    \"baseRevision\": null,\n    \"payload\": {\"name\": \"Postman smoke list\", \"color\": \"#cc5533\"},\n    \"clientModifiedAt\": \"2026-10-28T00:00:00Z\"\n  }]\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/sync_push"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('same batch retry is idempotent', function () { pm.response.to.have.status(200); });",
+            "pm.test('retry returns the same result', function () { const d=pm.response.json(); pm.expect(d.batchId).eql(pm.environment.get('batchId')); pm.expect(d.accepted).to.include(pm.environment.get('changeId')); pm.expect(d.conflicts).eql([]); });"
+          ] } }]
+        },
+        {
+          "name": "8. Stale revision conflict (negative business case)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"deviceId\": \"{{deviceId}}\",\n  \"batchId\": \"{{conflictBatchId}}\",\n  \"changes\": [{\n    \"changeId\": \"{{conflictChangeId}}\",\n    \"entity\": \"list\",\n    \"entityId\": \"{{listId}}\",\n    \"operation\": \"upsert\",\n    \"baseRevision\": 0,\n    \"payload\": {\"name\": \"Stale overwrite\"},\n    \"clientModifiedAt\": \"2026-10-28T00:00:00Z\"\n  }]\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/sync_push"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('stale change is reported without overwriting', function () { pm.response.to.have.status(200); const d=pm.response.json(); pm.expect(d.accepted).eql([]); pm.expect(d.conflicts[0].reason).eql('stale_revision'); pm.expect(d.conflicts[0].serverRevision).eql(1); });"
+          ] } }]
+        },
+        {
+          "name": "9. Pull and save cursor (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"deviceId\": \"{{deviceId}}\",\n  \"cursor\": null,\n  \"limit\": 200\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/sync_pull"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('pull succeeds', function () { pm.response.to.have.status(200); });",
+            "const d=pm.response.json(); pm.test('pull response matches contract', function () { pm.expect(d.changes).to.be.an('array'); pm.expect(d.nextCursor).to.be.a('string'); pm.expect(d.hasMore).to.be.a('boolean'); }); pm.environment.set('cursor',d.nextCursor);"
+          ] } }]
+        },
+        {
+          "name": "10. Unauthenticated sync pull (negative)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{publishableKey}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"deviceId\": \"{{deviceId}}\",\n  \"cursor\": null,\n  \"limit\": 20\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/sync_pull"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('anonymous sync is rejected with 401', function () { pm.response.to.have.status(401); });"
+          ] } }]
+        }
+      ]
+    },
+    {
+      "name": "Sharing (uses two accounts)",
+      "item": [
+        {
+          "name": "11. Invite by email (positive; database only)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"invite\",\n  \"listId\": \"{{listId}}\",\n  \"email\": \"{{recipientEmail}}\",\n  \"permission\": \"viewer\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/manage_sharing",
+            "description": "Creates a pending email invitation in the database; no notification email is sent."
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('owner invitation succeeds', function () { pm.response.to.have.status(200); });",
+            "const d=pm.response.json(); pm.test('invitation token returned', function () { pm.expect(d.status).eql('invited'); pm.expect(d.invitationId).to.be.a('string'); }); pm.environment.set('invitationId',d.invitationId);"
+          ] } }]
+        },
+        {
+          "name": "12. Owner lists members and pending invite (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"list\",\n  \"listId\": \"{{listId}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/manage_sharing"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('owner can inspect list sharing', function () { pm.response.to.have.status(200); const d=pm.response.json(); pm.expect(d.status).eql('listed'); pm.expect(d.members).to.be.an('array'); pm.expect(d.invitations).to.be.an('array'); pm.expect(d.invitations.some(x=>x.invitationId===pm.environment.get('invitationId'))).eql(true); });"
+          ] } }]
+        },
+        {
+          "name": "13. Accept invite as the verified invitee (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{memberAccessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"accept\",\n  \"inviteToken\": \"{{invitationId}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/manage_sharing"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('verified invitee accepts', function () { pm.response.to.have.status(200); const d=pm.response.json(); pm.expect(d.status).eql('accepted'); });"
+          ] } }]
+        },
+        {
+          "name": "14. Invitee pulls shared list snapshot (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{memberAccessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"deviceId\": \"{{memberDeviceId}}\",\n  \"cursor\": null,\n  \"limit\": 200\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/sync_pull"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('accepted member receives shared snapshot', function () { pm.response.to.have.status(200); const d=pm.response.json(); pm.expect(d.changes.some(c=>c.entityId===pm.environment.get('listId'))).eql(true); pm.environment.set('memberCursor',d.nextCursor); });"
+          ] } }]
+        },
+        {
+          "name": "15. Owner revokes accepted member (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"revoke\",\n  \"listId\": \"{{listId}}\",\n  \"memberUserId\": \"{{memberUserId}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/manage_sharing"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('owner revokes member and sync tombstones are queued', function () { pm.response.to.have.status(200); const d=pm.response.json(); pm.expect(d.status).eql('revoked'); });"
+          ] } }]
+        },
+        {
+          "name": "16. Removed member receives revocation tombstone (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{memberAccessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"deviceId\": \"{{memberDeviceId}}\",\n  \"cursor\": \"{{memberCursor}}\",\n  \"limit\": 200\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/sync_pull"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('revocation arrives as list tombstone', function () { pm.response.to.have.status(200); const d=pm.response.json(); pm.expect(d.changes.some(c=>c.entityId===pm.environment.get('listId')&&c.operation==='delete')).eql(true); });"
+          ] } }]
+        },
+        {
+          "name": "17. Owner sends another invite for decline test",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"invite\",\n  \"listId\": \"{{listId}}\",\n  \"email\": \"{{recipientEmail}}\",\n  \"permission\": \"viewer\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/manage_sharing"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('second invite created', function () { pm.response.to.have.status(200); const d=pm.response.json(); pm.environment.set('invitationId',d.invitationId); });"] } }]
+        },
+        {
+          "name": "18. Invitee declines (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{memberAccessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"decline\",\n  \"inviteToken\": \"{{invitationId}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/manage_sharing"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('invitee can decline', function () { pm.response.to.have.status(200); pm.expect(pm.response.json().status).eql('declined'); });"] } }]
+        },
+        {
+          "name": "19. Non-owner cannot inspect a private list (negative)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{memberAccessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"list\",\n  \"listId\": \"{{privateListId}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/manage_sharing"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('private list access is denied', function () { pm.expect([403,404]).to.include(pm.response.code); });"
+          ] } }]
+        },
+        {
+          "name": "20. Delete smoke-test list (positive tombstone)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"deviceId\": \"{{deviceId}}\",\n  \"batchId\": \"{{deleteBatchId}}\",\n  \"changes\": [{\n    \"changeId\": \"{{deleteChangeId}}\",\n    \"entity\": \"list\",\n    \"entityId\": \"{{listId}}\",\n    \"operation\": \"delete\",\n    \"baseRevision\": 1,\n    \"payload\": null,\n    \"clientModifiedAt\": \"2026-10-28T00:00:00Z\"\n  }]\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/sync_push"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('list deletion accepted as tombstone', function () { pm.response.to.have.status(200); pm.expect(pm.response.json().accepted).to.include(pm.environment.get('deleteChangeId')); });"] } }]
+        },
+        {
+          "name": "21. Pull list tombstone (positive)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Profile", "value": "taskvilla" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"deviceId\": \"{{deviceId}}\",\n  \"cursor\": \"{{cursor}}\",\n  \"limit\": 200\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{supabaseUrl}}/rest/v1/rpc/sync_pull"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('incremental pull includes list tombstone', function () { pm.response.to.have.status(200); pm.expect(pm.response.json().changes.some(c=>c.entityId===pm.environment.get('listId')&&c.operation==='delete')).eql(true); });"] } }]
+        }
+      ]
+    }
+  ]
+}

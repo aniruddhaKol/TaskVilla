@@ -24,7 +24,8 @@
       const footer = node.classList.contains('mobile-content') ? node.querySelector('.sticky-action') : null;
       let bottom = Math.min(bounds.bottom, visualBottom) - 12;
       if (footer) bottom = Math.min(bottom, footer.getBoundingClientRect().top - 12);
-      const top = Math.max(bounds.top, visualTop) + 12;
+      const header = node.classList.contains('mobile-content') ? node.querySelector(':scope > .mobile-header,:scope > .brand-header') : null;
+      const top = Math.max(bounds.top, visualTop, header ? header.getBoundingClientRect().bottom : 0) + 12;
       const visibleHeight = bottom - top;
       if (visibleHeight <= 0) continue;
       if (target.height > visibleHeight || target.top < top) node.scrollTop += target.top - top;

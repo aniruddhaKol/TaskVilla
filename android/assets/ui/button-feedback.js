@@ -6,7 +6,7 @@
  let held=null,pending=null;
  window.buttonFeedbackPending=false;
  const target=e=>(e.target instanceof Element?e.target:e.target?.parentElement)?.closest(controls);
- const unavailable=el=>!el||el.matches(':disabled,[aria-disabled=true]');
+ const unavailable=el=>!el||el.matches(':disabled,[aria-disabled=true]:not([data-allow-disabled-tap])');
  function releaseHeld(cancel=false){if(!held)return;const el=held.el;if(cancel){starts.delete(el);cancelled.add(el);}el.classList.remove('ui-pressed');held=null;}
  function clearPending(){if(pending)pending.el.classList.remove('ui-pressed');pending=null;window.buttonFeedbackPending=false;}
  document.addEventListener('pointerdown',e=>{if(e.button!==0||!e.isPrimary)return;const el=target(e);if(unavailable(el)||pending)return;releaseHeld();cancelled.delete(el);starts.set(el,performance.now());el.classList.add('ui-pressed');held={el,x:e.clientX,y:e.clientY,id:e.pointerId};},{capture:true,passive:true});

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Push result",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "batchId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "accepted": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/conflict"
+      }
+    },
+    "serverTime": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "batchId",
+    "accepted",
+    "conflicts"
+  ],
+  "$defs": {
+    "conflict": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "title": "Conflict",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "changeId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "entityId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "serverRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "serverRecord": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": true
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "stale_revision",
+            "permission_denied",
+            "deleted_on_server"
+          ]
+        }
+      },
+      "required": [
+        "changeId",
+        "entityId",
+        "reason"
+      ]
+    }
+  }
+}
