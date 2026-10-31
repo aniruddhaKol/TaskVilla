@@ -1,0 +1,75 @@
+Revised message	Scenario
+Task deleted.	Task deletion confirmed and completed
+Deleted “{name}” and its {pending} pending and {completed} completed task(s).	List deletion completed; displayed for 6 seconds
+We couldn't save this time, but your changes are still here.	Local save fails; draft changes remain
+Your files are still being added. Try saving once they're ready.	Save tapped while files are being attached
+Only the list owner can edit these details.	Shared-list member attempts to save list details
+Keep your task name within 100 characters.	Task name exceeds 100 characters
+Keep your note within 280 characters.	Task comment or activity note exceeds 280 characters
+Save your current comment before editing another one.	Another comment is edited while the composer contains unsaved text
+A task can hold up to 10 files. Remove a few and try again.	Task save detects more than 10 attachments
+This task already has 10 files. Remove one to add another.	Attach tapped when the task already has 10 files
+There's room for up to 10 files. Please choose fewer files and try again.	Selected files would exceed the attachment count limit
+Each file needs to be 2 MB or smaller. Nothing was added.	A selected attachment exceeds 2 MB
+This file is already attached.	Duplicate attachment detected within the task
+We couldn't read those files, so nothing was added. Try again.	Browser attachment processing fails
+We couldn't add those files on this device. Try selecting them again.	Android cannot import the selected attachments
+To add files, connect Google Drive or Dropbox in Cloud Storage settings.	Attachment selection attempted without an available cloud connection
+Your attachment is ready.	Cloud attachment download succeeds
+We couldn't download the attachment. Please try again.	Cloud attachment download fails; server error may replace this message
+This attachment is over the 2 MB limit.	Cloud attachment download exceeds the size limit
+The download didn't finish properly. Please try again.	Downloaded attachment size differs from its expected size
+We couldn't save the file to your device. Try again.	Attachment storage fails during download
+We couldn't share those files. Please try again.	Browser file sharing fails
+File sharing isn't available here. Try the Android app or a supported browser.	Browser does not support file sharing
+Some files couldn't be shared. Attach any missing files and try again.	Android cannot share the requested attachments
+There isn't an app on this device that can open this file.	Android cannot open the selected attachment
+You're signed in! Your saved data is ready to sync.	OTP verification succeeds
+You're signed out, and your account data has been cleared from this device.	Sign-out and local account-data removal complete
+We couldn't sign you out. Your pending changes are still safe on this device.	Sign-out fails; returned error may replace this message
+Sign in to see lists shared with you.	Signed-out user taps Shared with me
+All synced! {uploaded} uploaded, {received} received.	Sync succeeds without conflicts
+Synced · {uploaded} sent, {received} received, {conflicts} to review.	Sync succeeds with conflicts
+We couldn't sync right now. Everything on this device is safe.	Sync fails; returned error may replace this message
+Your local data is up to date. Sign in to sync across devices.	Pull-to-refresh while signed out
+We couldn't refresh just now. Please try again.	Local refresh fails
+This person's access has been removed.	Owner successfully removes a shared member
+Your sharing changes are synced.	Sharing changes synchronize successfully
+We couldn't load the people on this list. Try again.	Member lookup fails; returned error may replace this message
+We couldn't update sharing right now. Your list is safe on this device.	Sharing update fails; returned error may replace this message
+Saved on this device. Sign in when you're ready to share the list.	List sharing changes saved while signed out
+Sign in to Cloud Sync before connecting cloud storage.	Cloud connection attempted without signing in
+Google Drive is connected. Disconnect it before switching to Dropbox.	Dropbox connection attempted while Google Drive is connected
+Dropbox is connected. Disconnect it before switching to Google Drive.	Google Drive connection attempted while Dropbox is connected
+This cloud storage option isn't ready yet.	Selected provider lacks server configuration
+We couldn't connect to cloud storage right now. Please try again.	Cloud operation fails; returned error may replace this message
+Cloud storage disconnected. Your existing files are still there.	Cloud provider disconnect succeeds
+Your default storage has been updated.	Default cloud-storage selection succeeds
+We couldn't open the cloud sign-in page. Please try again.	Android cannot launch provider authorization
+There aren't any unfinished tasks to copy.	Copy requested for a list without incomplete tasks
+Copied your unfinished task names.	Plain-text copy succeeds
+Task list copied as a table. You can paste it into Excel or an email.	Table copy succeeds
+We couldn't copy that. Please try again.	Clipboard operation fails
+Your JSON backup is downloading.	JSON export download starts in browser preview
+Your XML backup is downloading.	XML export download starts in browser preview
+We couldn't prepare the export. Please try again.	Export preparation fails
+We couldn't open the save window. Please try again.	Android export destination picker cannot open
+Export cancelled.	User cancels the Android export picker
+The export was interrupted. Please try again.	Export content is unavailable after returning from the picker
+Backup saved as {filename}.	Android successfully writes the backup
+We couldn't save your backup. Please try again.	Android cannot write the backup
+There's no app available to open this link.	Android cannot open an external link
+Give your activity a title to continue.	Activity title is empty
+Keep your activity title within 100 characters.	Activity title exceeds 100 characters
+Pick a last-done date that's today or earlier.	Activity date is invalid or in the future
+Please enter a valid amount, with up to two decimal places.	Activity amount has an invalid format
+Use a whole number of days between 0 and 365.	Activity interval is invalid
+You already have an activity with this name. Try a different one.	Edited activity duplicates another activity’s name
+Activity deleted.	Activity deletion succeeds
+Entry deleted.	Activity history-entry deletion succeeds
+{Returned error message}	Sync, sharing, cloud or attachment failures can display the returned service/native error instead of their fallback message
+Sharing isn't available until a server is connected.	Legacy invitation/demo action
+A server connection is needed to share lists. Nothing was added.	Legacy join-list action
+Saved on this device. Sign in to sync invitations.	Legacy list-saving path while signed out
+Demo code copied.	Legacy demo invitation code copied
+Demo code: 8R2Q-6T	Legacy demo clipboard fallback

@@ -20,15 +20,15 @@ final class AttachmentStore {
  static JSONObject importFile(Context c,Uri uri,Set<String> staged)throws Exception{
   String name="Attachment",mime=c.getContentResolver().getType(uri);long declared=-1;
   try(Cursor rows=c.getContentResolver().query(uri,new String[]{OpenableColumns.DISPLAY_NAME,OpenableColumns.SIZE},null,null,null)){if(rows!=null&&rows.moveToFirst()){int ni=rows.getColumnIndex(OpenableColumns.DISPLAY_NAME),si=rows.getColumnIndex(OpenableColumns.SIZE);if(ni>=0&&!rows.isNull(ni))name=rows.getString(ni);if(si>=0&&!rows.isNull(si))declared=rows.getLong(si);}}
-  if(declared>MAX_BYTES)throw new IOException("Each file must be 2 MB or smaller. No files were added.");
+  if(declared>MAX_BYTES)throw new IOException("Each file needs to be 2 MB or smaller. Nothing was added.");
   name=name.replaceAll("[\\p{Cntrl}/\\\\]","_");if(name.length()>180)name=name.substring(0,180);if(name.trim().isEmpty())name="Attachment";
-  String id=UUID.randomUUID().toString();File dir=directory(c,id);staged.add(id);if(!dir.mkdirs()){staged.remove(id);throw new IOException("Could not store the file");}
-  try{long total=0;CRC32 crc=new CRC32();try(InputStream in=c.getContentResolver().openInputStream(uri);OutputStream out=new FileOutputStream(new File(dir,"content"))){if(in==null)throw new IOException("Could not read the selected file");byte[] b=new byte[32768];int n;while((n=in.read(b))!=-1){total+=n;if(total>MAX_BYTES)throw new IOException("Each file must be 2 MB or smaller. No files were added.");crc.update(b,0,n);out.write(b,0,n);}}
+  String id=UUID.randomUUID().toString();File dir=directory(c,id);staged.add(id);if(!dir.mkdirs()){staged.remove(id);throw new IOException("We couldn't save the file to your device. Try again.");}
+  try{long total=0;CRC32 crc=new CRC32();try(InputStream in=c.getContentResolver().openInputStream(uri);OutputStream out=new FileOutputStream(new File(dir,"content"))){if(in==null)throw new IOException("Could not read the selected file");byte[] b=new byte[32768];int n;while((n=in.read(b))!=-1){total+=n;if(total>MAX_BYTES)throw new IOException("Each file needs to be 2 MB or smaller. Nothing was added.");crc.update(b,0,n);out.write(b,0,n);}}
    JSONObject meta=new JSONObject().put("id",id).put("name",name).put("size",total).put("crc32",String.format(Locale.US,"%08x",crc.getValue())).put("mime",mime==null?"application/octet-stream":mime);writeMetadata(c,id,meta);return meta;
   }catch(Exception e){staged.remove(id);remove(c,id);throw e;}
  }
  static void writeMetadata(Context c,String id,JSONObject meta)throws Exception{try(OutputStream out=new FileOutputStream(new File(directory(c,id),"metadata.json"))){out.write(meta.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));}}
- static JSONObject importCloud(Context c,String id,String name,String mime,long expected,InputStream in)throws Exception{if(expected<0||expected>MAX_BYTES)throw new IOException("Each file must be 2 MB or smaller.");File dir=directory(c,id);if(!dir.mkdirs())throw new IOException("Could not store the file");try{long total=0;CRC32 crc=new CRC32();try(OutputStream out=new FileOutputStream(new File(dir,"content"))){byte[] b=new byte[32768];int n;while((n=in.read(b))!=-1){total+=n;if(total>MAX_BYTES)throw new IOException("Each file must be 2 MB or smaller.");crc.update(b,0,n);out.write(b,0,n);}}if(total!=expected)throw new IOException("Downloaded attachment was incomplete.");JSONObject meta=new JSONObject().put("id",id).put("name",name).put("size",total).put("crc32",String.format(Locale.US,"%08x",crc.getValue())).put("mime",mime).put("cloudCached",true);writeMetadata(c,id,meta);return meta;}catch(Exception e){remove(c,id);throw e;}}
+ static JSONObject importCloud(Context c,String id,String name,String mime,long expected,InputStream in)throws Exception{if(expected<0||expected>MAX_BYTES)throw new IOException("This attachment is over the 2 MB limit.");File dir=directory(c,id);if(!dir.mkdirs())throw new IOException("We couldn't save the file to your device. Try again.");try{long total=0;CRC32 crc=new CRC32();try(OutputStream out=new FileOutputStream(new File(dir,"content"))){byte[] b=new byte[32768];int n;while((n=in.read(b))!=-1){total+=n;if(total>MAX_BYTES)throw new IOException("This attachment is over the 2 MB limit.");crc.update(b,0,n);out.write(b,0,n);}}if(total!=expected)throw new IOException("The download didn't finish properly. Please try again.");JSONObject meta=new JSONObject().put("id",id).put("name",name).put("size",total).put("crc32",String.format(Locale.US,"%08x",crc.getValue())).put("mime",mime).put("cloudCached",true);writeMetadata(c,id,meta);return meta;}catch(Exception e){remove(c,id);throw e;}}
  static String fingerprint(Context c,String id)throws Exception{
   JSONObject meta=metadata(c,id);File file=content(c,id);String hex=meta.optString("crc32","");
   if(!hex.matches("[0-9a-f]{8}")||meta.optLong("size",-1)!=file.length()){
@@ -38,11 +38,11 @@ final class AttachmentStore {
   return file.length()+":"+hex;
  }
  static JSONArray importSelection(Context c,Collection<Uri> selected,int existingCount,JSONArray existingIds,Set<String> staged)throws Exception{
-  if(existingCount<0||existingCount>MAX_FILES||selected.size()+existingCount>MAX_FILES)throw new IOException("Maximum 10 files per task. No files were added.");
+  if(existingCount<0||existingCount>MAX_FILES||selected.size()+existingCount>MAX_FILES)throw new IOException("There's room for up to 10 files. Please choose fewer files and try again.");
   Set<String> seen=new HashSet<>();for(int i=0;i<existingIds.length();i++)try{seen.add(fingerprint(c,existingIds.getString(i)));}catch(Exception ignored){}
   JSONArray files=new JSONArray();ArrayList<String> created=new ArrayList<>();
   try{for(Uri uri:selected){JSONObject file=importFile(c,uri,staged);String id=file.getString("id");created.add(id);
-    if(!seen.add(file.getLong("size")+":"+file.getString("crc32")))throw new IOException("Same file is already attached");files.put(file);
+    if(!seen.add(file.getLong("size")+":"+file.getString("crc32")))throw new IOException("This file is already attached.");files.put(file);
    }return files;
   }catch(Exception error){for(String id:created){staged.remove(id);remove(c,id);}throw error;}
  }

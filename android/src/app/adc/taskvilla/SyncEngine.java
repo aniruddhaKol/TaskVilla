@@ -12,6 +12,8 @@ public final class SyncEngine {
         store.beginAccountSync();try{
         if(api.session()==null)throw new IllegalStateException("Sign in with email to sync and share lists.");
         store.storeUser(api.session().optString("userId"));
+        progress(context,"Syncing your records…");
+        store.repairListCreationTimes();
         // A verified account immediately claims all shares addressed to its email.
         withRetry(()->api.sharing(new JSONObject().put("action","list")));
         store.ensureOutbox();JSONObject device=store.deviceAndCursor();int pushed=0,received=0,pages=0,conflicts=0;
@@ -33,15 +35,25 @@ public final class SyncEngine {
             for(String email:desired)if(!current.contains(email))withRetry(()->api.sharing(new JSONObject().put("action","share").put("listId",listServer).put("email",email).put("permission","editor")));
             store.sharingSaved(list.getString("id"),sharingVersion);
         }
-        if(store.needsListCreationBackfill())store.clearCursor();
-        boolean reset=false;
-        for(int i=0;;i++){
-            JSONObject current=store.deviceAndCursor();JSONObject request=new JSONObject().put("deviceId",current.getString("deviceId")).put("cursor",current.isNull("cursor")?JSONObject.NULL:current.getString("cursor")).put("limit",500);
+        // Apply only the final state of each record, atomically across all pages.
+        // A replayed revoke followed by re-sharing must not delete pending local files.
+        JSONObject deviceState=store.deviceAndCursor();String cursor=deviceState.isNull("cursor")?null:deviceState.getString("cursor");boolean reset=false;
+        java.util.LinkedHashMap<String,JSONObject> latest=new java.util.LinkedHashMap<>();java.util.HashSet<String> cursors=new java.util.HashSet<>();
+        JSONObject finalPage=null;
+        for(;;){
+            JSONObject request=new JSONObject().put("deviceId",deviceState.getString("deviceId")).put("cursor",cursor==null?JSONObject.NULL:cursor).put("limit",500);
             JSONObject page;
             try{page=withRetry(()->api.pull(request));}
-            catch(TaskVillaApi.ApiException e){if(e.status==410&&!reset){store.clearCursor();reset=true;i--;continue;}throw e;}
-            received+=store.applyPull(page);pages++;if(!page.optBoolean("hasMore"))break;
+            catch(TaskVillaApi.ApiException e){if(e.status==410&&!reset){store.clearCursor();cursor=null;latest.clear();cursors.clear();reset=true;continue;}throw e;}
+            JSONArray changes=page.getJSONArray("changes");for(int i=0;i<changes.length();i++){JSONObject change=changes.getJSONObject(i);String key=change.getString("entity")+":"+change.getString("entityId");latest.remove(key);latest.put(key,change);}
+            pages++;finalPage=page;String next=page.getString("nextCursor");if(next.isEmpty())throw new IllegalStateException("Sync could not finish. Your local data is safe.");
+            if(!page.optBoolean("hasMore"))break;
+            if(next.equals(cursor)||!cursors.add(next))throw new IllegalStateException("Sync could not finish. Your local data is safe.");cursor=next;
         }
+        JSONArray finalChanges=new JSONArray();java.util.HashSet<String> deletedLists=new java.util.HashSet<>();
+        for(JSONObject change:latest.values())if("list".equals(change.getString("entity"))){finalChanges.put(change);if("delete".equals(change.getString("operation")))deletedLists.add(change.getString("entityId"));}
+        for(JSONObject change:latest.values())if(!"list".equals(change.getString("entity"))){JSONObject payload=change.optJSONObject("payload");if("task".equals(change.getString("entity"))&&"upsert".equals(change.getString("operation"))&&payload!=null&&deletedLists.contains(payload.optString("listId")))continue;finalChanges.put(change);}
+        finalPage.put("changes",finalChanges);received=store.applyPull(finalPage);
         JSONArray refreshedLists=new JSONObject(store.load()).optJSONArray("lists");if(refreshedLists!=null)for(int i=0;i<refreshedLists.length();i++){JSONObject l=refreshedLists.getJSONObject(i);if(l.optBoolean("joined"))continue;String localId=l.getString("id"),serverId=store.serverIdFor("list",localId);try{JSONObject people=withRetry(()->api.sharing(new JSONObject().put("action","list").put("listId",serverId)));store.cacheListMembers(localId,people);}catch(TaskVillaApi.ApiException e){if(e.status!=403&&e.status!=404)throw e;}}
         try{JSONArray sent=store.pendingFavourites();JSONObject personal=api.favourites(new JSONObject().put("changes",sent));store.applyFavourites(api.session().optString("userId"),sent,personal);}catch(Exception ignored){/* Personal changes remain pending for the next explicit sync. */}
         // Attachment operations are best-effort and never turn a successful local/task sync into a failure.
@@ -49,7 +61,8 @@ public final class SyncEngine {
         try{
             JSONObject status=api.cloudOperation("connection-status",new JSONObject());boolean hasDefault=false;JSONArray providers=status.optJSONArray("providers");
             if(providers!=null)for(int i=0;i<providers.length();i++){JSONObject p=providers.optJSONObject(i);String provider=p==null?"":p.optString("provider");if(("google_drive".equals(provider)||"dropbox".equals(provider))&&p.optBoolean("configured")&&p.optJSONObject("connection")!=null&&"connected".equals(p.getJSONObject("connection").optString("status")))hasDefault=true;}
-            if(hasDefault){JSONArray pending=store.pendingCloudAttachments();for(int i=0;i<pending.length();i++){JSONObject item=pending.getJSONObject(i),f=item.getJSONObject("file");try{File content=AttachmentStore.content(context,f.getString("id"));JSONObject uploaded=api.uploadCloudAttachment(item.getString("taskServerId"),f.getString("id"),content,f);store.markCloudUploaded(item.getString("taskLocalId"),f.getString("id"),uploaded);cloudUploaded++;}catch(Exception e){cloudWarning="Some attachments are still waiting to upload.";}}}
+            if(hasDefault){JSONArray pending=store.pendingCloudAttachments();for(int i=0;i<pending.length();i++){JSONObject item=pending.getJSONObject(i),f=item.getJSONObject("file");progress(context,"Uploading files ("+(i+1)+"/"+pending.length()+")…");try{File content=AttachmentStore.content(context,f.getString("id"));JSONObject uploaded=api.uploadCloudAttachment(item.getString("taskServerId"),f.getString("id"),content,f);store.markCloudUploaded(item.getString("taskLocalId"),f.getString("id"),uploaded);cloudUploaded++;}catch(Exception e){cloudWarning="Some attachments are still waiting to upload.";}}}
+            progress(context,"Refreshing attachments…");
             JSONArray cloudTasks=store.cloudTasks();for(int start=0;start<cloudTasks.length();start+=100){JSONArray batchIds=new JSONArray();int end=Math.min(start+100,cloudTasks.length());for(int i=start;i<end;i++)batchIds.put(cloudTasks.getJSONObject(i).getString("serverId"));try{JSONObject listed=api.cloudOperation("list",new JSONObject().put("taskIds",batchIds));JSONArray groups=listed.optJSONArray("attachmentsByTask");java.util.HashMap<String,JSONArray> byTask=new java.util.HashMap<>();if(groups!=null)for(int i=0;i<groups.length();i++){JSONObject group=groups.getJSONObject(i);byTask.put(group.getString("taskId"),group.optJSONArray("attachments")==null?new JSONArray():group.getJSONArray("attachments"));}for(int i=start;i<end;i++){JSONObject item=cloudTasks.getJSONObject(i);JSONArray refs=byTask.getOrDefault(item.getString("serverId"),new JSONArray());store.mergeCloudAttachments(item.getString("localId"),refs);cloudReceived+=refs.length();}}catch(TaskVillaApi.ApiException e){if(e.status!=403&&e.status!=404)cloudWarning="Some cloud attachments could not be refreshed.";}catch(Exception e){cloudWarning="Some cloud attachments could not be refreshed.";}}
             try{api.cloudOperation("cleanup",new JSONObject());}catch(Exception ignored){}
         }catch(Exception e){cloudWarning="Cloud attachments could not be refreshed; your local files are safe.";}
@@ -63,6 +76,7 @@ public final class SyncEngine {
         if("shared".equals(result.optString("status"))||"revoked".equals(result.optString("status")))synchronize(context,store,api);
         return result;
     }
+    private static void progress(Context context,String message){if(context instanceof MainActivity)((MainActivity)context).reportSyncProgress(message);}
     private interface Request { JSONObject run()throws Exception; }
     private static JSONObject withRetry(Request request)throws Exception{
         Exception last=null;
