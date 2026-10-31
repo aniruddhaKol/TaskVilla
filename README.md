@@ -2,9 +2,9 @@
 
 Android task lists, shared tasks and personal Activity Tracker by **Aniruddha DuttaChowdhury** (ADChowdhury).
 
-Current release: **v0.58.16** (versionCode 92). Package: `app.adc.taskvilla`.
+Current release: **v0.58.19** (versionCode 95). Package: `app.adc.taskvilla`.
 
-[Download APK](https://github.com/aniruddhaKol/TaskVilla/releases/tag/v0.58.16)
+[Download APK](https://github.com/aniruddhaKol/TaskVilla/releases/tag/v0.58.19)
 
 ## Source layout
 
@@ -24,4 +24,4 @@ Requires Android SDK platform 36/build-tools 36.0.0 and a compatible JDK. Set `J
 
 SQL source is in `taskvilla-api-contract/migrations/`; the attachment gateway is `supabase/functions/taskvilla-attachments/index.ts`. Connector credentials, service keys, encryption keys, session tokens and signing material are not committed. Configure required secrets in Supabase's server-side environment, as referenced by the function source. Do not put provider client secrets in Android code.
 
-Open `web-preview/index.html` for the UI preview. See [latest release notes](docs/releases/v0.58.16.md). Third-party attribution remains with the assets and in THIRD-PARTY-NOTICES.md.
+Open `web-preview/index.html` for the UI preview. See [latest release notes](docs/releases/v0.58.19.md). Third-party attribution remains with the assets and in THIRD-PARTY-NOTICES.md.
