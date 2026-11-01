@@ -1,5 +1,5 @@
-# Current work — 31 October 2026
+# Current work — 1 November 2026
 
-v0.58.19 / versionCode 95: Activity Tracker empty cards use full list/search width. Trim top/bottom blank inner bands from all three source cards while preserving the artwork, text and original border. Source changes complete; building and emulator deployment pending. No Git/Postman changes or extra tests.
+v0.58.22 / versionCode 98: Upcoming and History empty-card bottom slices now retain the lower decorative border (start at 95%, previously 97%). All card and other UI unchanged. Build and emulator deployment pending. No Git/Postman changes.
 
-Completed: v0.58.19 built successfully and installed/launched on emulator-5554 as an in-place update. Existing data preserved. No extra tests, Git push or Postman changes.
+Completed: v0.58.22 built and installed/launched on emulator-5554. Existing data retained. APK: android-taskvilla/releases/v0.58.22/taskvilla-v0.58.22.apk. No Git/Postman changes or extra tests.

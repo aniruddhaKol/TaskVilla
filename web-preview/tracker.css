@@ -86,10 +86,10 @@ body.capture{width:100vw;height:100dvh}
 .tracker-empty-card-art>span{background-repeat:no-repeat}
 .tracker-empty-card.is-upcoming .empty-card-top{aspect-ratio:330 / 16.1600;background-image:url("assets/activity-empty-reference.png");background-size:314.84848% 2530.94059%;background-position:0.70522% 0.00000%}
 .tracker-empty-card.is-upcoming .empty-card-body{aspect-ratio:330 / 303.0000;background-image:url("assets/activity-empty-reference.png");background-size:314.84848% 134.98350%;background-position:0.70522% 45.73585%}
-.tracker-empty-card.is-upcoming .empty-card-bottom{aspect-ratio:330 / 12.1200;background-image:url("assets/activity-empty-reference.png");background-size:314.84848% 3374.58746%;background-position:0.70522% 98.74017%}
+.tracker-empty-card.is-upcoming .empty-card-bottom{aspect-ratio:330 / 20.2000;background-image:url("assets/activity-empty-reference.png");background-size:314.84848% 2024.75248%;background-position:0.70522% 98.71399%}
 .tracker-empty-card.is-all .empty-card-top{aspect-ratio:1139 / 55.2400;background-image:url("assets/activity-empty-all.png");background-size:100.00000% 2500.00000%;background-position:0.00000% 0.00000%}
 .tracker-empty-card.is-all .empty-card-body{aspect-ratio:1139 / 1104.8000;background-image:url("assets/activity-empty-all.png");background-size:100.00000% 125.00000%;background-position:0.00000% 60.00000%}
 .tracker-empty-card.is-all .empty-card-bottom{aspect-ratio:1139 / 41.4300;background-image:url("assets/activity-empty-all.png");background-size:100.00000% 3333.33333%;background-position:0.00000% 100.00000%}
 .tracker-empty-card.is-history .empty-card-top{aspect-ratio:334 / 16.1600;background-image:url("assets/activity-empty-reference.png");background-size:311.07784% 2530.94059%;background-position:100.00000% 0.00000%}
 .tracker-empty-card.is-history .empty-card-body{aspect-ratio:334 / 303.0000;background-image:url("assets/activity-empty-reference.png");background-size:311.07784% 134.98350%;background-position:100.00000% 45.73585%}
-.tracker-empty-card.is-history .empty-card-bottom{aspect-ratio:334 / 12.1200;background-image:url("assets/activity-empty-reference.png");background-size:311.07784% 3374.58746%;background-position:100.00000% 98.74017%}
+.tracker-empty-card.is-history .empty-card-bottom{aspect-ratio:334 / 20.2000;background-image:url("assets/activity-empty-reference.png");background-size:311.07784% 2024.75248%;background-position:100.00000% 98.71399%}

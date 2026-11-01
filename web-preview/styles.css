@@ -507,3 +507,14 @@ html:not(.keyboard-open) .palette-overlay{align-items:center}
 
 /* Task editor list-name strip, matching the supplied dark wooden reference. */
 .device .task-list-label{display:flex;align-items:center;min-height:30px;margin:6px 10px;padding:5px 10px;background:linear-gradient(#241208b8,#241208b8),url('assets/taskvilla-wood.png') center/cover;color:#fff8ef;border:1px solid #a77c52;border-left:4px solid #e6b55e;border-radius:5px;box-shadow:inset 0 1px 0 #ffffff20;font-size:12px;font-weight:600;line-height:1.4;overflow-wrap:anywhere}
+
+/* Match the one-pixel separation used by the other primary lists. */
+.list-screen .list-stack>.task-row{margin-bottom:1px}
+
+/* Four-pixel spacing around Completed without changing task-to-task gaps. */
+.device.list-screen .list-stack>.completed-image-button{margin-top:4px;margin-bottom:4px}
+.list-screen .task-list-empty{padding-bottom:4px}
+.device.list-screen .list-stack.no-open-tasks>.completed-image-button{margin-top:0}
+
+.list-screen .list-stack>.task-row:has(+ .completed-image-button){margin-bottom:0}
+
