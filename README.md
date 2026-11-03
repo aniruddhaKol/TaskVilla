@@ -6,6 +6,18 @@ Current release: **v0.58.22** (versionCode 98). Package: `app.adc.taskvilla`.
 
 [Download APK](https://github.com/aniruddhaKol/TaskVilla/releases/tag/v0.58.22)
 
+## Screenshots
+
+Fresh screenshots captured from TaskVilla v0.58.22 on the Android emulator, 3 November 2026.
+
+| Home | Tasks | Task details |
+| --- | --- | --- |
+| <img src="previews/latest/home.png" width="230" alt="TaskVilla home"> | <img src="previews/latest/tasks.png" width="230" alt="Tasks in a list"> | <img src="previews/latest/task-details.png" width="230" alt="Task details"> |
+
+| Activities — All | Activities — Upcoming | Activities — History |
+| --- | --- | --- |
+| <img src="previews/latest/activities-all.png" width="230" alt="Activity Tracker All empty state"> | <img src="previews/latest/activities-upcoming.png" width="230" alt="Activity Tracker Upcoming empty state"> | <img src="previews/latest/activities-history.png" width="230" alt="Activity Tracker History empty state"> |
+
 ## Source layout
 
 - `android/`: Java WebView shell, SQLite persistence, authentication/sync integration and packaged UI.
