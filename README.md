@@ -22,6 +22,8 @@ Requires Android SDK platform 36/build-tools 36.0.0 and a compatible JDK. Set `J
 
 ## Backend
 
-SQL source is in `taskvilla-api-contract/migrations/`; the attachment gateway is `supabase/functions/taskvilla-attachments/index.ts`. Connector credentials, service keys, encryption keys, session tokens and signing material are not committed. Configure required secrets in Supabase's server-side environment, as referenced by the function source. Do not put provider client secrets in Android code.
+SQL source is in `supabase/migrations/`; the attachment gateway is `supabase/functions/taskvilla-attachments/index.ts`. Connector credentials, service keys, encryption keys, session tokens and signing material are not committed. Configure required secrets in Supabase's server-side environment, as referenced by the function source. Do not put provider client secrets in Android code.
 
 Open `web-preview/index.html` for the UI preview. See [latest release notes](docs/releases/v0.58.22.md). Third-party attribution remains with the assets and in THIRD-PARTY-NOTICES.md.
+
+Backend deployment notes: [docs/backend](docs/backend/supabase-deployment.md). Postman: [supabase/tests/postman](supabase/tests/postman/). The root API contract is canonical; Android reads `api-config.xml`, not the duplicate contract assets. `web-preview/` is the master UI in the Git checkout; `android/assets/ui/` is packaged UI. The working folder currently uses `ui/` and `android-taskvilla/assets/ui/`; these working assets were left in place.

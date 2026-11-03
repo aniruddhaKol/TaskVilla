@@ -61,3 +61,10 @@ All six tables have RLS enabled and explicit deny policies for `anon` and `authe
 - Security Advisor reported only that leaked-password protection is disabled; TaskVilla uses email OTP and does not enable password login. Performance Advisor's unused-index notices are expected for a newly deployed schema.
 
 See `TaskVilla.postman_collection.json` and `TaskVilla.postman_environment.json` for request templates and assertions. Fill in `testEmail` and OTP from a mailbox you control; sharing acceptance/revocation additionally needs a second verified account in `memberAccessToken`.
+
+
+## Migration reconciliation blocker
+
+Reported live history has 23 migration records versus 21 Git SQL files, with 13 timestamp differences and two remote-only records. Filenames and SQL are preserved unchanged. Reconcile the live history and recover the two remote-only sources before any migration deployment; do not blindly rename/reapply migrations or run `supabase db push`. No live database changes were made by this restructure.
+
+Postman assets: [collection](../../supabase/tests/postman/TaskVilla.postman_collection.json) and [environment](../../supabase/tests/postman/TaskVilla.postman_environment.json). The canonical contract is [application.xml](../../taskvilla-api-contract/application.xml). Android runtime reads the separate, unchanged `assets/api-config.xml`; packaged API-contract copies are unused.
