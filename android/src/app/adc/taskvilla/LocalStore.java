@@ -29,6 +29,23 @@ public final class LocalStore extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX tasks_by_list ON tasks(list_id)");
         db.execSQL("CREATE TABLE preferences (key TEXT PRIMARY KEY, value TEXT NOT NULL)");
         createSyncTables(db);createPersonalFavourites(db);
+        seedStarterLists(db);
+    }
+
+    private static void seedStarterLists(SQLiteDatabase db) {
+        String[][] starterLists = {
+            {"Home Projects", "emoji:\uD83C\uDFE0", "#B86A43"},
+            {"Shopping", "emoji:\uD83D\uDECD\uFE0F", "#87549B"},
+            {"Grocery", "emoji:\uD83E\uDDFA", "#4C7A43"},
+            {"Personal TODO", "emoji:\uD83D\uDCCB", "#4972A5"},
+            {"Pending Trips", "emoji:\uD83E\uDDED", "#287D80"}
+        };
+        long createdAt = System.currentTimeMillis();
+        for (String[] list : starterLists) {
+            db.execSQL("INSERT INTO lists (id,name,icon,colour,shared,built_in,joined,created_at) VALUES (?,?,?,?,0,0,0,?)",
+                    new Object[]{UUID.randomUUID().toString(), list[0], list[1], list[2], createdAt++});
+        }
+        db.execSQL("INSERT INTO preferences (key,value) VALUES ('state','{\"attachmentOrderVersion\":1}')");
     }
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(oldVersion<2)db.execSQL("ALTER TABLE lists ADD COLUMN invitees TEXT NOT NULL DEFAULT '[]'");
