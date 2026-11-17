@@ -214,7 +214,7 @@ button:focus-visible{outline:2px solid #b89168;outline-offset:2px}
 #app[data-theme="brick"]{--theme-texture:url('assets/taskvilla-brick.png');--theme-chrome:#573d32;--theme-overlay:#321b16ce;--theme-border:#bb8d75;--settings-surface:#e0d1c6}
 #app[data-theme="bookshelves"]{--theme-texture:url('assets/taskvilla-bookshelves.png');--theme-chrome:#503321;--theme-overlay:#24160fcc;--theme-border:#be9467;--settings-surface:#dcd0bf}
 .device[data-theme="bookshelves"]{background:#503321 var(--theme-texture) center/cover}
-.device[data-theme] .brand-header,.device[data-theme]:not(.list-themed) .mobile-header,.device[data-theme] .sticky-action,.device[data-theme] .settings-author{background-color:var(--theme-chrome);background-image:linear-gradient(var(--theme-overlay),var(--theme-overlay)),var(--theme-texture);background-size:cover;background-position:center;color:#fff8ef;border-color:var(--theme-border)}
+.device[data-theme] .brand-header,.device[data-theme]:not(.list-themed) .mobile-header,.device[data-theme]:not(.tracker-screen) .sticky-action,.device[data-theme] .settings-author{background-color:var(--theme-chrome);background-image:linear-gradient(var(--theme-overlay),var(--theme-overlay)),var(--theme-texture);background-size:cover;background-position:center;color:#fff8ef;border-color:var(--theme-border)}
 .device.settings-screen{background:var(--settings-surface)!important}
 .theme-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
 .settings-layout .theme-preview{height:72px;background-size:cover;background-position:center}
@@ -518,3 +518,13 @@ html:not(.keyboard-open) .palette-overlay{align-items:center}
 
 .list-screen .list-stack>.task-row:has(+ .completed-image-button){margin-bottom:0}
 
+
+.sortable-list-row{display:flex;align-items:center}
+.sortable-list-row:not(.task-drag-preview){position:relative}
+.sortable-list-row>.drag-handle{position:absolute;left:16px;z-index:1}
+.sortable-list-row>.navigation-row{padding-left:35px}
+.sortable-list-row.dragging{visibility:hidden}
+.sortable-list-row.task-drag-preview{transform:none;background:none;border:0;box-shadow:none}
+
+.tracker-screen .sticky-action{background:none;border-top:0;box-shadow:none;pointer-events:none}
+.tracker-screen .sticky-action button{pointer-events:auto}

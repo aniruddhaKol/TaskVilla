@@ -9,7 +9,7 @@ $env:JAVA_OPTS = '--enable-native-access=ALL-UNNAMED'
 function CheckBuild([string]$step) { if ($LASTEXITCODE -ne 0) { throw "$step failed ($LASTEXITCODE)" } }
 Push-Location $PSScriptRoot
 try {
- New-Item -ItemType Directory -Force -Path work\classes,work\dex,signing,releases\v0.58.23 | Out-Null
+ New-Item -ItemType Directory -Force -Path work\classes,work\dex,signing,releases\v0.58.26 | Out-Null
  if (!(Test-Path -LiteralPath 'signing\taskvilla-review.keystore')) {
   & "$jdkTask\bin\keytool.exe" -genkeypair -keystore 'signing\taskvilla-review.keystore' -alias taskvilla-review -keyalg RSA -keysize 2048 -validity 10000 -storepass android -keypass android -dname 'CN=Aniruddha DuttaChowdhury, OU=ADChowdhury, O=ADChowdhury, C=IN'
   CheckBuild 'Create review signing key'
@@ -26,8 +26,8 @@ try {
  try { & "$buildToolsTask\aapt.exe" add -f '..\unsigned.apk' classes.dex; CheckBuild 'Add DEX' } finally { Pop-Location }
  & "$buildToolsTask\zipalign.exe" -f -p 4 work\unsigned.apk work\aligned.apk
  CheckBuild 'Align APK'
- & "$buildToolsTask\apksigner.bat" sign --ks signing\taskvilla-review.keystore --ks-key-alias taskvilla-review --ks-pass pass:android --key-pass pass:android --out releases\v0.58.23\taskvilla-v0.58.23.apk work\aligned.apk
+ & "$buildToolsTask\apksigner.bat" sign --ks signing\taskvilla-review.keystore --ks-key-alias taskvilla-review --ks-pass pass:android --key-pass pass:android --out releases\v0.58.26\taskvilla-v0.58.26.apk work\aligned.apk
  CheckBuild 'Sign APK'
- & "$buildToolsTask\apksigner.bat" verify --verbose --print-certs releases\v0.58.23\taskvilla-v0.58.23.apk
+ & "$buildToolsTask\apksigner.bat" verify --verbose --print-certs releases\v0.58.26\taskvilla-v0.58.26.apk
  CheckBuild 'Verify APK'
 } finally { Pop-Location }
